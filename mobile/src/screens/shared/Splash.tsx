@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {RootStackParamList} from '../App';
+import {RootStackParamList} from '@app-types/navigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
@@ -11,7 +12,11 @@ function Splash({navigation}: Props & any) {
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false);
-      navigation.replace('Login');
+      AsyncStorage.getItem('name').then(value => {
+        value
+          ? navigation.replace('PrivateRouter')
+          : navigation.replace('Login');
+      });
     }, 5000);
   }, [navigation]);
 

@@ -9,11 +9,12 @@ import {
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {RootStackParamList} from '../../App';
+import {TabNavigationParamList} from '@app-types/navigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type Props = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+type Props = NativeStackNavigationProp<TabNavigationParamList, 'Profile'>;
 
-function Home({navigation}: Props & any) {
+function Profile({navigation}: Props & any) {
   return (
     <View style={styles.mainBody}>
       <ScrollView
@@ -24,7 +25,11 @@ function Home({navigation}: Props & any) {
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => navigation.replace('Splash')}>
+              onPress={() => {
+                AsyncStorage.clear().then(() => {
+                  navigation.replace('Splash');
+                });
+              }}>
               <Text style={styles.buttonTextStyle}>Выйти</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
@@ -34,7 +39,7 @@ function Home({navigation}: Props & any) {
   );
 }
 
-export default Home;
+export default Profile;
 
 const styles = StyleSheet.create({
   mainBody: {

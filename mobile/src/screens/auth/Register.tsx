@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {RootStackParamList} from '../App';
+import {RootStackParamList} from '@app-types/navigation';
 
-type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+type Props = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
-function Login({navigation}: Props & any) {
+function Register({navigation}: Props & any) {
   return (
     <View style={styles.mainBody}>
       <ScrollView
@@ -49,7 +49,7 @@ function Login({navigation}: Props & any) {
             <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => navigation.replace('Home')}>
+              onPress={() => navigation.replace('PrivateRouter')}>
               <Text style={styles.buttonTextStyle}>Войти</Text>
             </TouchableOpacity>
             <View style={styles.additionActions}>
@@ -63,7 +63,7 @@ function Login({navigation}: Props & any) {
   );
 }
 
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({
   mainBody: {
