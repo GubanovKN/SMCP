@@ -2,7 +2,8 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Splash from '@screens/shared/Splash';
-import Login from '@screens/auth/Login';
+import LoginPhone from '@screens/auth/LoginPhone';
+import Code from '@screens/auth/Code';
 import PrivateRouter from '@routers/PrivateRouter';
 
 const Stack = createStackNavigator();
@@ -17,7 +18,12 @@ function SharedRouter() {
       />
       <Stack.Screen
         name="Login"
-        component={Login}
+        component={LoginPhone}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Code"
+        component={Code}
         options={{headerShown: false}}
       />
       <Stack.Screen

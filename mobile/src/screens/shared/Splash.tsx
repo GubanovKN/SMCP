@@ -1,17 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import {useTheme} from '@rneui/themed';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Loading from '@custom-components/animated/Loading';
+
+import {useGridStyles} from '@styles';
 
 import {RootStackParamList} from '@app-types/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
 function Splash({navigation}: Props & any) {
-  const [animating, setAnimating] = useState(true);
+  const {theme} = useTheme();
+  const gridStyles = useGridStyles();
+
   useEffect(() => {
     setTimeout(() => {
-      setAnimating(false);
       AsyncStorage.getItem('name').then(value => {
         value
           ? navigation.replace('PrivateRouter')
@@ -21,28 +27,10 @@ function Splash({navigation}: Props & any) {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
-      <ActivityIndicator
-        animating={animating}
-        color="#FFFFFF"
-        size="large"
-        style={styles.activityIndicator}
-      />
+    <View style={[gridStyles.body]}>
+      <Loading color={theme.colors.primary} size={45} width={12} />
     </View>
   );
 }
 
 export default Splash;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#307ecc',
-  },
-  activityIndicator: {
-    alignItems: 'center',
-    height: 80,
-  },
-});

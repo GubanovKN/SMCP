@@ -1,25 +1,8 @@
 import React from 'react';
-import {MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
-import {NavigationContainer} from '@react-navigation/native';
-
-import SharedRouter from '@routers/SharedRouter';
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    secondaryContainer: 'transparent',
-  },
-};
+import Layout from '@screens/shared/Layout';
 
 function App() {
-  return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <SharedRouter />
-      </NavigationContainer>
-    </PaperProvider>
-  );
+  return <Layout />;
 }
 
 export default App;

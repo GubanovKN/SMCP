@@ -5,7 +5,9 @@
     "paths": {
       "@screens/*": ["screens/*"],
       "@routers/*": ["routers/*"],
-      "@app-types/*": ["types/*"]
+      "@custom-components/*": ["components/*"],
+      "@app-types/*": ["types/*"],
+      "@styles": ["styles/index"]
     }
   }
 }
