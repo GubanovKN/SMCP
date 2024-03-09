@@ -5,8 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
-import {useTheme, Text, CheckBox} from '@rneui/themed';
-import TextInputMask from 'react-native-text-input-mask';
+import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,25 +22,33 @@ import {RootStackParamList} from '@app-types/navigation';
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
-  phone?: string;
+  email?: string;
+  password?: string;
   checked?: string;
 };
 
-function LoginPhone({navigation}: Props & any) {
+const re =
+  /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+function LoginEmailPassword({navigation}: Props & any) {
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
   const buttonStyles = useButtonStyles();
-  const [phoneMasked, setPhoneMasked] = useState<string>();
-  const [phone, setPhone] = useState<string | undefined>();
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
 
-  const changePhone = (masked: string, unmasked: string | undefined) => {
-    setErrors({...errors, phone: undefined});
-    setPhoneMasked(masked);
-    setPhone(`7${unmasked}`);
+  const changeEmail = (value: string) => {
+    setErrors({...errors, email: undefined});
+    setEmail(value);
+  };
+
+  const changePassword = (value: string) => {
+    setErrors({...errors, password: undefined});
+    setPassword(value);
   };
 
   const toggleCheckbox = () => {
@@ -52,8 +59,12 @@ function LoginPhone({navigation}: Props & any) {
   const validateForm = () => {
     let currentErrors: FormData = {};
 
-    if (!phone || phone.length !== 11) {
-      currentErrors.phone = 'Укажите номер телефона';
+    if (!email || !re.test(email)) {
+      currentErrors.email = 'Укажите электронную почту';
+    }
+
+    if (!password) {
+      currentErrors.password = 'Укажите пароль';
     }
 
     if (!checked) {
@@ -68,12 +79,13 @@ function LoginPhone({navigation}: Props & any) {
 
   const submitForm = () => {
     AsyncStorage.multiSet([
-      ['loginType', 'phone'],
-      ['loginConfirm', 'token'],
-      ['phoneShow', phoneMasked!],
-      ['phone', phone!],
+      ['loginType', 'email'],
+      ['loginConfirm', 'password'],
+      ['emailShow', email!],
+      ['email', email!],
+      ['password', password!],
     ]).then(() => {
-      navigation.replace('Code');
+      navigation.replace('PrivateRouter');
     });
   };
 
@@ -87,21 +99,41 @@ function LoginPhone({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Укажите номер телефона
+                Укажите электронную почту
               </Text>
-              <TextInputMask
+              <Input
                 style={[
                   textInputStyles.input,
-                  errors.phone ? textInputStyles.inputError : null,
+                  errors.email ? textInputStyles.inputError : null,
                 ]}
-                placeholder={'+7 (000) 000-00-00'}
-                placeholderTextColor={theme.colors.grey1}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                textContentType="emailAddress"
                 autoCapitalize="none"
-                keyboardType="phone-pad"
+                keyboardType="email-address"
                 underlineColorAndroid="#f000"
                 cursorColor={theme.colors.primary}
-                mask={'+7 ([000]) [000]-[00]-[00]'}
-                onChangeText={changePhone}
+                onChangeText={changeEmail}
+              />
+            </View>
+            <View style={[gridStyles.blockFlex]}>
+              <Text style={[textInputStyles.label]}>Укажите пароль</Text>
+              <Input
+                style={[
+                  textInputStyles.input,
+                  errors.password ? textInputStyles.inputError : null,
+                ]}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                textContentType="password"
+                autoCapitalize="none"
+                keyboardType="default"
+                underlineColorAndroid="#f000"
+                cursorColor={theme.colors.primary}
+                secureTextEntry={true}
+                onChangeText={changePassword}
               />
             </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>
@@ -150,4 +182,4 @@ function LoginPhone({navigation}: Props & any) {
   );
 }
 
-export default LoginPhone;
+export default LoginEmailPassword;

@@ -5,6 +5,8 @@ export const theme = createTheme({
     primary: '#00DA9F',
     grey0: '#F4F4F4',
     grey1: '#B9B9B9',
+    success: '#00DA9F',
+    error: '#FF0000',
     black: '#494949',
     background: 'white',
   },

@@ -5,8 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
-import {useTheme, Text, CheckBox} from '@rneui/themed';
-import TextInputMask from 'react-native-text-input-mask';
+import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,9 +22,12 @@ import {RootStackParamList} from '@app-types/navigation';
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
-  phone?: string;
+  email?: string;
   checked?: string;
 };
+
+const re =
+  /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
 function LoginPhone({navigation}: Props & any) {
   const {theme} = useTheme();
@@ -33,15 +35,13 @@ function LoginPhone({navigation}: Props & any) {
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
   const buttonStyles = useButtonStyles();
-  const [phoneMasked, setPhoneMasked] = useState<string>();
-  const [phone, setPhone] = useState<string | undefined>();
+  const [email, setEmail] = useState<string | undefined>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
 
-  const changePhone = (masked: string, unmasked: string | undefined) => {
-    setErrors({...errors, phone: undefined});
-    setPhoneMasked(masked);
-    setPhone(`7${unmasked}`);
+  const changeEmail = (value: string) => {
+    setErrors({...errors, email: undefined});
+    setEmail(value);
   };
 
   const toggleCheckbox = () => {
@@ -52,8 +52,8 @@ function LoginPhone({navigation}: Props & any) {
   const validateForm = () => {
     let currentErrors: FormData = {};
 
-    if (!phone || phone.length !== 11) {
-      currentErrors.phone = 'Укажите номер телефона';
+    if (!email || !re.test(email)) {
+      currentErrors.email = 'Укажите электронную почту';
     }
 
     if (!checked) {
@@ -68,10 +68,10 @@ function LoginPhone({navigation}: Props & any) {
 
   const submitForm = () => {
     AsyncStorage.multiSet([
-      ['loginType', 'phone'],
+      ['loginType', 'email'],
       ['loginConfirm', 'token'],
-      ['phoneShow', phoneMasked!],
-      ['phone', phone!],
+      ['emailShow', email!],
+      ['email', email!],
     ]).then(() => {
       navigation.replace('Code');
     });
@@ -87,21 +87,22 @@ function LoginPhone({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Укажите номер телефона
+                Укажите электронный адрес
               </Text>
-              <TextInputMask
+              <Input
                 style={[
                   textInputStyles.input,
-                  errors.phone ? textInputStyles.inputError : null,
+                  errors.email ? textInputStyles.inputError : null,
                 ]}
-                placeholder={'+7 (000) 000-00-00'}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                errorStyle={textInputStyles.inputErrorMessageNone}
                 placeholderTextColor={theme.colors.grey1}
                 autoCapitalize="none"
-                keyboardType="phone-pad"
+                keyboardType="email-address"
                 underlineColorAndroid="#f000"
                 cursorColor={theme.colors.primary}
-                mask={'+7 ([000]) [000]-[00]-[00]'}
-                onChangeText={changePhone}
+                onChangeText={changeEmail}
               />
             </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>

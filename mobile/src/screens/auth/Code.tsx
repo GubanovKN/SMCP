@@ -35,7 +35,7 @@ function Code({navigation}: Props & any) {
         AsyncStorage.getItem(value).then(keyValue => {
           setKey(keyValue);
         });
-        AsyncStorage.getItem(`${value}Masked`).then(keyMaskedValue => {
+        AsyncStorage.getItem(`${value}Show`).then(keyMaskedValue => {
           setKeyMasked(keyMaskedValue);
         });
       }
@@ -47,7 +47,7 @@ function Code({navigation}: Props & any) {
     if (disabled) {
       timer = setInterval(() => {
         setSeconds(sec => {
-          if (sec === 1) {
+          if (sec <= 1) {
             setDisabled(false);
             clearInterval(timer);
           }
@@ -82,11 +82,10 @@ function Code({navigation}: Props & any) {
                   autoCapitalize="none"
                   keyboardType="number-pad"
                   underlineColorAndroid="#f000"
-                  blurOnSubmit={false}
+                  cursorColor={theme.colors.primary}
                   mask={'[000]-[000]'}
                   onChangeText={(masked, unmasked) => {
                     setCode(unmasked);
-                    setDisabled(unmasked?.length !== 6);
                     setReady(unmasked?.length === 6);
                   }}
                 />
@@ -125,10 +124,10 @@ function Code({navigation}: Props & any) {
                       : buttonStyles.buttonPrimaryOutline,
                   ]}
                   activeOpacity={0.5}
-                  disabled={disabled}
+                  disabled={disabled && !ready}
                   onPress={() => {
-                    if (ready && code) {
-                      AsyncStorage.setItem('code', code).then(() => {
+                    if (ready) {
+                      AsyncStorage.setItem('code', code!).then(() => {
                         navigation.replace('PrivateRouter');
                       });
                     } else if (!disabled) {

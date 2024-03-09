@@ -5,7 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
-import {useTheme, Text, CheckBox} from '@rneui/themed';
+import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -24,10 +24,11 @@ type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
   phone?: string;
+  password?: string;
   checked?: string;
 };
 
-function LoginPhone({navigation}: Props & any) {
+function LoginPhonePassword({navigation}: Props & any) {
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -35,6 +36,7 @@ function LoginPhone({navigation}: Props & any) {
   const buttonStyles = useButtonStyles();
   const [phoneMasked, setPhoneMasked] = useState<string>();
   const [phone, setPhone] = useState<string | undefined>();
+  const [password, setPassword] = useState<string>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
 
@@ -42,6 +44,11 @@ function LoginPhone({navigation}: Props & any) {
     setErrors({...errors, phone: undefined});
     setPhoneMasked(masked);
     setPhone(`7${unmasked}`);
+  };
+
+  const changePassword = (value: string) => {
+    setErrors({...errors, password: undefined});
+    setPassword(value);
   };
 
   const toggleCheckbox = () => {
@@ -54,6 +61,10 @@ function LoginPhone({navigation}: Props & any) {
 
     if (!phone || phone.length !== 11) {
       currentErrors.phone = 'Укажите номер телефона';
+    }
+
+    if (!password) {
+      currentErrors.password = 'Укажите пароль';
     }
 
     if (!checked) {
@@ -69,11 +80,12 @@ function LoginPhone({navigation}: Props & any) {
   const submitForm = () => {
     AsyncStorage.multiSet([
       ['loginType', 'phone'],
-      ['loginConfirm', 'token'],
+      ['loginConfirm', 'password'],
       ['phoneShow', phoneMasked!],
       ['phone', phone!],
+      ['password', password!],
     ]).then(() => {
-      navigation.replace('Code');
+      navigation.replace('PrivateRouter');
     });
   };
 
@@ -102,6 +114,25 @@ function LoginPhone({navigation}: Props & any) {
                 cursorColor={theme.colors.primary}
                 mask={'+7 ([000]) [000]-[00]-[00]'}
                 onChangeText={changePhone}
+              />
+            </View>
+            <View style={[gridStyles.blockFlex]}>
+              <Text style={[textInputStyles.label]}>Укажите пароль</Text>
+              <Input
+                style={[
+                  textInputStyles.input,
+                  errors.password ? textInputStyles.inputError : null,
+                ]}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                textContentType="password"
+                autoCapitalize="none"
+                keyboardType="default"
+                underlineColorAndroid="#f000"
+                cursorColor={theme.colors.primary}
+                secureTextEntry={true}
+                onChangeText={changePassword}
               />
             </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>
@@ -150,4 +181,4 @@ function LoginPhone({navigation}: Props & any) {
   );
 }
 
-export default LoginPhone;
+export default LoginPhonePassword;

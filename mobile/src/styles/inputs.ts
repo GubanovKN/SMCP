@@ -1,20 +1,35 @@
 import {makeStyles} from '@rneui/themed';
 
 export const useTextInputStyles = makeStyles(theme => ({
+  container: {
+    paddingHorizontal: 0,
+    borderBottomWidth: 0,
+  },
   input: {
     height: 50,
     borderRadius: 15,
-    borderWidth: 0,
+    borderWidth: 1,
+    borderColor: theme.colors.grey0,
     backgroundColor: theme.colors.grey0,
     color: theme.colors.black,
     fontSize: 24,
     letterSpacing: 0,
     paddingHorizontal: theme.spacing.md,
   },
+  inputSuccess: {
+    borderColor: theme.colors.success,
+  },
+  inputError: {
+    borderColor: theme.colors.error,
+  },
+  inputErrorMessageNone: {
+    display: 'none',
+  },
   label: {
     color: theme.colors.grey1,
     marginLeft: 15,
-    marginBottom: 15,
+    marginBottom: 5,
+    marginTop: 5,
   },
 }));
 
