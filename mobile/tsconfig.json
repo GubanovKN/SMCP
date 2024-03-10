@@ -7,7 +7,8 @@
       "@routers/*": ["routers/*"],
       "@custom-components/*": ["components/*"],
       "@app-types/*": ["types/*"],
-      "@styles": ["styles/index"]
+      "@styles": ["styles/index"],
+      "@translations": ["translations/index"]
     }
   }
 }

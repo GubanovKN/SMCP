@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -20,6 +21,8 @@ import {
 
 import {RootStackParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'loginPhone';
+
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
@@ -28,6 +31,7 @@ type FormData = {
 };
 
 function LoginPhone({navigation}: Props & any) {
+  const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -53,11 +57,11 @@ function LoginPhone({navigation}: Props & any) {
     let currentErrors: FormData = {};
 
     if (!phone || phone.length !== 11) {
-      currentErrors.phone = 'Укажите номер телефона';
+      currentErrors.phone = t(`${labelsAreaTranslation}.phone.error`);
     }
 
     if (!checked) {
-      currentErrors.checked = 'Подтвердите согласие';
+      currentErrors.checked = t(`${labelsAreaTranslation}.privacyPolicy.error`);
     }
 
     setErrors(currentErrors);
@@ -79,7 +83,9 @@ function LoginPhone({navigation}: Props & any) {
 
   return (
     <SafeAreaView style={[gridStyles.body]}>
-      <Text style={gridStyles.header}>Вход</Text>
+      <Text style={gridStyles.header}>
+        {t(`${labelsAreaTranslation}.title`)}
+      </Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[gridStyles.container]}>
@@ -87,7 +93,7 @@ function LoginPhone({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Укажите номер телефона
+                {t(`${labelsAreaTranslation}.phone.label`)}
               </Text>
               <TextInputMask
                 style={[
@@ -121,10 +127,10 @@ function LoginPhone({navigation}: Props & any) {
               />
               <View>
                 <Text style={checkInputStyles.label}>
-                  При входе или регистрации, вы соглашаетесь
+                  {t(`${labelsAreaTranslation}.privacyPolicy.label`)}
                 </Text>
                 <Text style={checkInputStyles.labelSecondary}>
-                  с политикой конфиденциальности и условиями сервиса
+                  {t(`${labelsAreaTranslation}.privacyPolicy.labelSecondary`)}
                 </Text>
               </View>
             </View>
@@ -139,7 +145,7 @@ function LoginPhone({navigation}: Props & any) {
                 activeOpacity={0.5}
                 onPress={validateForm}>
                 <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
-                  Продолжить
+                  {t(`${labelsAreaTranslation}.continue.label`)}
                 </Text>
               </TouchableOpacity>
             </View>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useTranslation} from 'react-i18next';
 import {Input, useTheme} from '@rneui/themed';
 import SelectDropdown from 'react-native-select-dropdown';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -21,9 +22,12 @@ import {
 
 import {RootStackParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'register';
+
 type Props = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 function Register({navigation}: Props & any) {
+  const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -32,20 +36,24 @@ function Register({navigation}: Props & any) {
 
   return (
     <SafeAreaView style={gridStyles.body}>
-      <Text style={gridStyles.header}>Регистрация</Text>
+      <Text style={gridStyles.header}>
+        {t(`${labelsAreaTranslation}.title`)}
+      </Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={gridStyles.container}>
         <View style={gridStyles.content}>
           <KeyboardAvoidingView enabled>
             <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>Ваша фамилия</Text>
+              <Text style={textInputStyles.label}>
+                {t(`${labelsAreaTranslation}.lastname.label`)}
+              </Text>
               <Input
                 style={textInputStyles.input}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
-                placeholder="Введите фамилию"
+                placeholder={t(`${labelsAreaTranslation}.lastname.placeholder`)}
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
@@ -55,13 +63,15 @@ function Register({navigation}: Props & any) {
               />
             </View>
             <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>Ваше имя</Text>
+              <Text style={textInputStyles.label}>
+                {t(`${labelsAreaTranslation}.name.label`)}
+              </Text>
               <Input
                 style={textInputStyles.input}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
-                placeholder="Введите имя"
+                placeholder={t(`${labelsAreaTranslation}.name.placeholder`)}
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
@@ -71,13 +81,17 @@ function Register({navigation}: Props & any) {
               />
             </View>
             <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>Ваше отчество</Text>
+              <Text style={textInputStyles.label}>
+                {t(`${labelsAreaTranslation}.middlename.label`)}
+              </Text>
               <Input
                 style={textInputStyles.input}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
-                placeholder="Введите отчество"
+                placeholder={t(
+                  `${labelsAreaTranslation}.middlename.placeholder`,
+                )}
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
@@ -87,13 +101,15 @@ function Register({navigation}: Props & any) {
               />
             </View>
             <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>Ваша электронная почта</Text>
+              <Text style={textInputStyles.label}>
+                {t(`${labelsAreaTranslation}.email.label`)}
+              </Text>
               <Input
                 style={textInputStyles.input}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
-                placeholder="Введите email"
+                placeholder={t(`${labelsAreaTranslation}.email.placeholder`)}
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
@@ -103,10 +119,15 @@ function Register({navigation}: Props & any) {
               />
             </View>
             <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>Ваш пол</Text>
+              <Text style={textInputStyles.label}>
+                {t(`${labelsAreaTranslation}.sex.label`)}
+              </Text>
               <SelectDropdown
-                data={['Мужской', 'Женский']}
-                defaultValue={'Мужской'}
+                data={[
+                  t(`${labelsAreaTranslation}.sex.man`),
+                  t(`${labelsAreaTranslation}.sex.woman`),
+                ]}
+                defaultValue={t(`${labelsAreaTranslation}.sex.man`)}
                 dropdownIconPosition="right"
                 buttonStyle={selectDropdownStyles.button}
                 buttonTextStyle={selectDropdownStyles.text}
@@ -139,7 +160,7 @@ function Register({navigation}: Props & any) {
                 activeOpacity={0.5}
                 onPress={() => navigation.replace('PrivateRouter')}>
                 <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
-                  Зарегистрироваться
+                  {t(`${labelsAreaTranslation}.continue.label`)}
                 </Text>
               </TouchableOpacity>
             </View>

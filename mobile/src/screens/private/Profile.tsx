@@ -7,6 +7,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useThemeMode, useTheme, Avatar, AirbnbRating} from '@rneui/themed';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,9 +22,12 @@ import {
 
 import {TabNavigationParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'profile.inner';
+
 type Props = NativeStackNavigationProp<TabNavigationParamList, 'Profile'>;
 
 function Profile({navigation}: Props & any) {
+  const {i18n, t} = useTranslation('privateRouter');
   const {mode, setMode} = useThemeMode();
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
@@ -38,6 +42,18 @@ function Profile({navigation}: Props & any) {
         contentContainerStyle={gridStyles.containerFluid}>
         <View style={gridStyles.content}>
           <View style={[gridStyles.blockFlexRow, gridStyles.justifyEnd]}>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}
+                onPress={() => {
+                  i18n.changeLanguage(i18n.language === 'ru' ? 'en' : 'ru');
+                }}>
+                <Text style={buttonStyles.label}>
+                  {i18n.language === 'ru' ? 'RU' : 'EN'}
+                </Text>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
             <KeyboardAvoidingView enabled>
               <TouchableOpacity
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
@@ -104,7 +120,7 @@ function Profile({navigation}: Props & any) {
             <Avatar
               size={82}
               rounded
-              title="П"
+              title={t(`${labelsAreaTranslation}.avatar.label`)}
               containerStyle={[
                 avatarStyles.container,
                 {marginEnd: theme.spacing.sm},
@@ -120,7 +136,9 @@ function Profile({navigation}: Props & any) {
             />
           </View>
           <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>
-            <Text style={[textStyles.base, textStyles.h2]}>Пользователь</Text>
+            <Text style={[textStyles.base, textStyles.h2]}>
+              {t(`${labelsAreaTranslation}.user.label`)}
+            </Text>
           </View>
           <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>
             <Text style={[textStyles.base, textStyles.bold, textStyles.h3]}>

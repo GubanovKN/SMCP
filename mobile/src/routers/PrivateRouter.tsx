@@ -1,5 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useTranslation} from 'react-i18next';
 import {useTheme} from '@rneui/themed';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -13,6 +14,7 @@ import {useTabBarStyles} from '@styles';
 const Tab = createBottomTabNavigator();
 
 function PrivateRouter() {
+  const {t} = useTranslation('privateRouter');
   const {theme} = useTheme();
   const tabBarStyles = useTabBarStyles();
 
@@ -30,8 +32,8 @@ function PrivateRouter() {
         name="Home"
         component={Home}
         options={{
-          title: 'Главная',
-          tabBarLabel: 'Главная',
+          title: t('home.title'),
+          tabBarLabel: t('home.tabBarLabel'),
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               color={color}
@@ -45,8 +47,8 @@ function PrivateRouter() {
         name="Favorite"
         component={Favorite}
         options={{
-          title: 'Избранное',
-          tabBarLabel: 'Избранное',
+          title: t('favorite.title'),
+          tabBarLabel: t('favorite.tabBarLabel'),
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               color={color}
@@ -60,8 +62,8 @@ function PrivateRouter() {
         name="Messages"
         component={Messages}
         options={{
-          title: 'Сообщения',
-          tabBarLabel: 'Сообщения',
+          title: t('messages.title'),
+          tabBarLabel: t('messages.tabBarLabel'),
           tabBarBadge: 3,
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
@@ -76,8 +78,8 @@ function PrivateRouter() {
         name="Profile"
         component={Profile}
         options={{
-          title: 'Профиль',
-          tabBarLabel: 'Профиль',
+          title: t('profile.title'),
+          tabBarLabel: t('profile.tabBarLabel'),
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               color={color}

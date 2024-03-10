@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Splash from '@screens/shared/Splash';
+import ChooseLanguage from '@screens/shared/ChooseLanguage';
 import LoginPhone from '@screens/auth/LoginPhone';
 import Code from '@screens/auth/Code';
 import Register from '@screens/auth/Register';
@@ -15,6 +16,11 @@ function SharedRouter() {
       <Stack.Screen
         name="Splash"
         component={Splash}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ChooseLanguage"
+        component={ChooseLanguage}
         options={{headerShown: false}}
       />
       <Stack.Screen

@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,6 +20,8 @@ import {
 
 import {RootStackParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'loginEmailPassword';
+
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
@@ -31,6 +34,7 @@ const re =
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
 function LoginEmailPassword({navigation}: Props & any) {
+  const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -60,15 +64,15 @@ function LoginEmailPassword({navigation}: Props & any) {
     let currentErrors: FormData = {};
 
     if (!email || !re.test(email)) {
-      currentErrors.email = 'Укажите электронную почту';
+      currentErrors.email = t(`${labelsAreaTranslation}.email.error`);
     }
 
     if (!password) {
-      currentErrors.password = 'Укажите пароль';
+      currentErrors.password = t(`${labelsAreaTranslation}.password.error`);
     }
 
     if (!checked) {
-      currentErrors.checked = 'Подтвердите согласие';
+      currentErrors.checked = t(`${labelsAreaTranslation}.privacyPolicy.error`);
     }
 
     setErrors(currentErrors);
@@ -91,7 +95,9 @@ function LoginEmailPassword({navigation}: Props & any) {
 
   return (
     <SafeAreaView style={[gridStyles.body]}>
-      <Text style={gridStyles.header}>Вход</Text>
+      <Text style={gridStyles.header}>
+        {t(`${labelsAreaTranslation}.title`)}
+      </Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[gridStyles.container]}>
@@ -99,7 +105,7 @@ function LoginEmailPassword({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Укажите электронную почту
+                {t(`${labelsAreaTranslation}.email.label`)}
               </Text>
               <Input
                 style={[
@@ -118,7 +124,9 @@ function LoginEmailPassword({navigation}: Props & any) {
               />
             </View>
             <View style={[gridStyles.blockFlex]}>
-              <Text style={[textInputStyles.label]}>Укажите пароль</Text>
+              <Text style={[textInputStyles.label]}>
+                {t(`${labelsAreaTranslation}.password.label`)}
+              </Text>
               <Input
                 style={[
                   textInputStyles.input,
@@ -153,10 +161,10 @@ function LoginEmailPassword({navigation}: Props & any) {
               />
               <View>
                 <Text style={checkInputStyles.label}>
-                  При входе или регистрации, вы соглашаетесь
+                  {t(`${labelsAreaTranslation}.privacyPolicy.label`)}
                 </Text>
                 <Text style={checkInputStyles.labelSecondary}>
-                  с политикой конфиденциальности и условиями сервиса
+                  {t(`${labelsAreaTranslation}.privacyPolicy.labelSecondary`)}
                 </Text>
               </View>
             </View>
@@ -171,7 +179,7 @@ function LoginEmailPassword({navigation}: Props & any) {
                 activeOpacity={0.5}
                 onPress={validateForm}>
                 <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
-                  Продолжить
+                  {t(`${labelsAreaTranslation}.continue.label`)}
                 </Text>
               </TouchableOpacity>
             </View>

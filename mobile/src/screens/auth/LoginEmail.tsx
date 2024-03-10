@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -19,6 +20,8 @@ import {
 
 import {RootStackParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'loginEmail';
+
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 type FormData = {
@@ -29,7 +32,8 @@ type FormData = {
 const re =
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
-function LoginPhone({navigation}: Props & any) {
+function LoginEmail({navigation}: Props & any) {
+  const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -53,11 +57,11 @@ function LoginPhone({navigation}: Props & any) {
     let currentErrors: FormData = {};
 
     if (!email || !re.test(email)) {
-      currentErrors.email = 'Укажите электронную почту';
+      currentErrors.email = t(`${labelsAreaTranslation}.email.error`);
     }
 
     if (!checked) {
-      currentErrors.checked = 'Подтвердите согласие';
+      currentErrors.checked = t(`${labelsAreaTranslation}.privacyPolicy.label`);
     }
 
     setErrors(currentErrors);
@@ -79,7 +83,9 @@ function LoginPhone({navigation}: Props & any) {
 
   return (
     <SafeAreaView style={[gridStyles.body]}>
-      <Text style={gridStyles.header}>Вход</Text>
+      <Text style={gridStyles.header}>
+        {t(`${labelsAreaTranslation}.title`)}
+      </Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[gridStyles.container]}>
@@ -87,7 +93,7 @@ function LoginPhone({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Укажите электронный адрес
+                {t(`${labelsAreaTranslation}.email.label`)}
               </Text>
               <Input
                 style={[
@@ -122,10 +128,10 @@ function LoginPhone({navigation}: Props & any) {
               />
               <View>
                 <Text style={checkInputStyles.label}>
-                  При входе или регистрации, вы соглашаетесь
+                  {t(`${labelsAreaTranslation}.privacyPolicy.label`)}
                 </Text>
                 <Text style={checkInputStyles.labelSecondary}>
-                  с политикой конфиденциальности и условиями сервиса
+                  {t(`${labelsAreaTranslation}.privacyPolicy.labelSecondary`)}
                 </Text>
               </View>
             </View>
@@ -140,7 +146,7 @@ function LoginPhone({navigation}: Props & any) {
                 activeOpacity={0.5}
                 onPress={validateForm}>
                 <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
-                  Продолжить
+                  {t(`${labelsAreaTranslation}.continue.label`)}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -151,4 +157,4 @@ function LoginPhone({navigation}: Props & any) {
   );
 }
 
-export default LoginPhone;
+export default LoginEmail;

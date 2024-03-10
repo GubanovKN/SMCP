@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {useTheme, Text} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -15,9 +16,12 @@ import {useGridStyles, useTextInputStyles, useButtonStyles} from '@styles';
 
 import {RootStackParamList} from '@app-types/navigation';
 
+const labelsAreaTranslation = 'code';
+
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 function Code({navigation}: Props & any) {
+  const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
@@ -64,7 +68,9 @@ function Code({navigation}: Props & any) {
 
   return (
     <SafeAreaView style={[gridStyles.body]}>
-      <Text style={gridStyles.header}>Код подтверждения</Text>
+      <Text style={gridStyles.header}>
+        {t(`${labelsAreaTranslation}.title`)}
+      </Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={[gridStyles.container]}>
@@ -72,7 +78,7 @@ function Code({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                Отправили на {keyMasked}
+                {t(`${labelsAreaTranslation}.code.label`, {key: keyMasked})}
               </Text>
               <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
                 <TextInputMask
@@ -109,7 +115,7 @@ function Code({navigation}: Props & any) {
                   }}>
                   <Text
                     style={[buttonStyles.label, buttonStyles.labelSecondary]}>
-                    Вернуться
+                    {t(`${labelsAreaTranslation}.back.label`)}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -148,7 +154,11 @@ function Code({navigation}: Props & any) {
                           ]
                         : buttonStyles.labelPrimaryOutline,
                     ]}>
-                    {ready ? 'Продолжить' : disabled ? seconds : 'Повторить'}
+                    {ready
+                      ? t(`${labelsAreaTranslation}.continue.label`)
+                      : disabled
+                      ? seconds
+                      : t(`${labelsAreaTranslation}.repeat.label`)}
                   </Text>
                 </TouchableOpacity>
               </View>

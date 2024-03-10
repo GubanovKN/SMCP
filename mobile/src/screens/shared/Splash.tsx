@@ -21,7 +21,7 @@ function Splash({navigation}: Props & any) {
       AsyncStorage.getItem('name').then(value => {
         value
           ? navigation.replace('PrivateRouter')
-          : navigation.replace('Login');
+          : navigation.replace('ChooseLanguage');
       });
     }, 5000);
   }, [navigation]);
