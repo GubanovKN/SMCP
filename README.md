@@ -17,7 +17,7 @@
 - [ ] Push notification
 - [ ] Communication with server
 - [ ] Disable auto rotate
-- [ ] Change language
+- [x] Change language
 - [ ] Add cookiecutter
 ## How build for development
  1. For IOS need open terminal in main project path and execute ```cd ios && pod install```
