@@ -1,27 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Home() {
-  const [name, setName] = useState('');
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('name');
-      if (value !== null) {
-        setName(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
   return (
     <View style={styles.mainBody}>
-      <Text style={styles.text}>Добро пожаловать, {name}</Text>
+      <Text style={styles.text}>Добро пожаловать</Text>
     </View>
   );
 }

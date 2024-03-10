@@ -97,7 +97,7 @@ function LoginPhone({navigation}: Props & any) {
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 errorStyle={textInputStyles.inputErrorMessageNone}
-                placeholderTextColor={theme.colors.grey1}
+                placeholderTextColor={theme.colors.grey2}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 underlineColorAndroid="#f000"
@@ -117,7 +117,7 @@ function LoginPhone({navigation}: Props & any) {
                 uncheckedIcon="checkbox-blank-outline"
                 checkedColor={theme.colors.primary}
                 uncheckedColor={
-                  errors.checked ? theme.colors.error : theme.colors.grey1
+                  errors.checked ? theme.colors.error : theme.colors.grey2
                 }
               />
               <View>

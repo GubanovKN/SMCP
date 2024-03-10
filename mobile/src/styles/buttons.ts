@@ -17,6 +17,12 @@ export const useButtonStyles = makeStyles(theme => ({
     shadowRadius: 1,
     elevation: 2,
   },
+  buttonTransparent: {
+    paddingHorizontal: 5,
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    shadowColor: 'transparent',
+  },
   buttonPrimary: {
     backgroundColor: theme.colors.primary,
     borderColor: theme.colors.primary,

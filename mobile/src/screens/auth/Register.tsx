@@ -2,129 +2,152 @@ import React from 'react';
 import {
   View,
   Text,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Input, useTheme} from '@rneui/themed';
+import SelectDropdown from 'react-native-select-dropdown';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {
+  useButtonStyles,
+  useGridStyles,
+  useTextInputStyles,
+  useSelectDropdownStyles,
+} from '@styles';
 
 import {RootStackParamList} from '@app-types/navigation';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
 function Register({navigation}: Props & any) {
+  const {theme} = useTheme();
+  const gridStyles = useGridStyles();
+  const textInputStyles = useTextInputStyles();
+  const buttonStyles = useButtonStyles();
+  const selectDropdownStyles = useSelectDropdownStyles();
+
   return (
-    <View style={styles.mainBody}>
+    <SafeAreaView style={gridStyles.body}>
+      <Text style={gridStyles.header}>Регистрация</Text>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.contentContainerStyle}>
-        <View>
+        contentContainerStyle={gridStyles.container}>
+        <View style={gridStyles.content}>
           <KeyboardAvoidingView enabled>
-            <View style={styles.sectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Введите Email"
-                placeholderTextColor="#8b9cb5"
+            <View style={gridStyles.blockFlex}>
+              <Text style={textInputStyles.label}>Ваша фамилия</Text>
+              <Input
+                style={textInputStyles.input}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                cursorColor={theme.colors.primary}
+                placeholder="Введите фамилию"
+                placeholderTextColor={theme.colors.grey2}
+                errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 returnKeyType="next"
-                underlineColorAndroid="#f000"
-                blurOnSubmit={false}
+                underlineColorAndroid="transparent"
               />
             </View>
-            <View style={styles.sectionStyle}>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Введите пароль"
-                placeholderTextColor="#8b9cb5"
-                keyboardType="default"
-                blurOnSubmit={false}
-                secureTextEntry={true}
-                underlineColorAndroid="#f000"
+            <View style={gridStyles.blockFlex}>
+              <Text style={textInputStyles.label}>Ваше имя</Text>
+              <Input
+                style={textInputStyles.input}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                cursorColor={theme.colors.primary}
+                placeholder="Введите имя"
+                placeholderTextColor={theme.colors.grey2}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                autoCapitalize="none"
+                keyboardType="email-address"
                 returnKeyType="next"
+                underlineColorAndroid="transparent"
               />
             </View>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={() => navigation.replace('PrivateRouter')}>
-              <Text style={styles.buttonTextStyle}>Войти</Text>
-            </TouchableOpacity>
-            <View style={styles.additionActions}>
-              <Text style={styles.registerTextStyle}>Регистрация</Text>
-              <Text style={styles.registerTextStyle}>Забыли пароль?</Text>
+            <View style={gridStyles.blockFlex}>
+              <Text style={textInputStyles.label}>Ваше отчество</Text>
+              <Input
+                style={textInputStyles.input}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                cursorColor={theme.colors.primary}
+                placeholder="Введите отчество"
+                placeholderTextColor={theme.colors.grey2}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+                underlineColorAndroid="transparent"
+              />
+            </View>
+            <View style={gridStyles.blockFlex}>
+              <Text style={textInputStyles.label}>Ваша электронная почта</Text>
+              <Input
+                style={textInputStyles.input}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                cursorColor={theme.colors.primary}
+                placeholder="Введите email"
+                placeholderTextColor={theme.colors.grey2}
+                errorStyle={textInputStyles.inputErrorMessageNone}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+                underlineColorAndroid="transparent"
+              />
+            </View>
+            <View style={gridStyles.blockFlex}>
+              <Text style={textInputStyles.label}>Ваш пол</Text>
+              <SelectDropdown
+                data={['Мужской', 'Женский']}
+                defaultValue={'Мужской'}
+                dropdownIconPosition="right"
+                buttonStyle={selectDropdownStyles.button}
+                buttonTextStyle={selectDropdownStyles.text}
+                dropdownStyle={selectDropdownStyles.dropdown}
+                rowTextStyle={selectDropdownStyles.rowText}
+                selectedRowStyle={selectDropdownStyles.selectedRow}
+                selectedRowTextStyle={selectDropdownStyles.selectedRowText}
+                renderDropdownIcon={isOpened => {
+                  return (
+                    <MaterialCommunityIcons
+                      name={isOpened ? 'chevron-up' : 'chevron-down'}
+                      color={theme.colors.black}
+                      size={24}
+                    />
+                  );
+                }}
+                onSelect={(selectedItem, index) => {
+                  console.log(selectedItem, index);
+                }}
+              />
+            </View>
+            <View
+              style={[
+                gridStyles.blockFlex,
+                gridStyles.alignCenter,
+                {marginTop: theme.spacing.lg, paddingBottom: theme.spacing.sm},
+              ]}>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonPrimary]}
+                activeOpacity={0.5}
+                onPress={() => navigation.replace('PrivateRouter')}>
+                <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
+                  Зарегистрироваться
+                </Text>
+              </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 export default Register;
-
-const styles = StyleSheet.create({
-  mainBody: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#307ecc',
-    alignContent: 'center',
-  },
-  contentContainerStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  sectionStyle: {
-    flexDirection: 'row',
-    height: 40,
-    marginTop: 20,
-    marginLeft: 45,
-    marginRight: 45,
-    margin: 5,
-  },
-  buttonStyle: {
-    backgroundColor: '#7DE24E',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 45,
-    marginRight: 45,
-    marginTop: 20,
-    marginBottom: 25,
-  },
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
-  },
-  inputStyle: {
-    flex: 1,
-    color: 'white',
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderWidth: 1,
-    borderRadius: 30,
-    borderColor: '#dadae8',
-  },
-  additionActions: {
-    flexDirection: 'row',
-    height: 40,
-    marginLeft: 35,
-    marginRight: 35,
-  },
-  registerTextStyle: {
-    flex: 1,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 14,
-    alignSelf: 'center',
-    padding: 5,
-  },
-});

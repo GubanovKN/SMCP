@@ -148,7 +148,7 @@ function LoginEmailPassword({navigation}: Props & any) {
                 uncheckedIcon="checkbox-blank-outline"
                 checkedColor={theme.colors.primary}
                 uncheckedColor={
-                  errors.checked ? theme.colors.error : theme.colors.grey1
+                  errors.checked ? theme.colors.error : theme.colors.grey2
                 }
               />
               <View>

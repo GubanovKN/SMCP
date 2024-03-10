@@ -107,7 +107,7 @@ function LoginPhonePassword({navigation}: Props & any) {
                   errors.phone ? textInputStyles.inputError : null,
                 ]}
                 placeholder={'+7 (000) 000-00-00'}
-                placeholderTextColor={theme.colors.grey1}
+                placeholderTextColor={theme.colors.grey2}
                 autoCapitalize="none"
                 keyboardType="phone-pad"
                 underlineColorAndroid="#f000"
@@ -147,7 +147,7 @@ function LoginPhonePassword({navigation}: Props & any) {
                 uncheckedIcon="checkbox-blank-outline"
                 checkedColor={theme.colors.primary}
                 uncheckedColor={
-                  errors.checked ? theme.colors.error : theme.colors.grey1
+                  errors.checked ? theme.colors.error : theme.colors.grey2
                 }
               />
               <View>

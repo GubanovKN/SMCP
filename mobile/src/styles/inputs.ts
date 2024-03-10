@@ -26,7 +26,7 @@ export const useTextInputStyles = makeStyles(theme => ({
     display: 'none',
   },
   label: {
-    color: theme.colors.grey1,
+    color: theme.colors.grey2,
     marginLeft: 15,
     marginBottom: 5,
     marginTop: 5,
@@ -53,7 +53,7 @@ export const useCheckInputStyles = makeStyles(theme => ({
     paddingEnd: 15,
   },
   label: {
-    color: theme.colors.grey1,
+    color: theme.colors.grey2,
     fontSize: 10,
     fontWeight: '400',
     marginLeft: 5,
@@ -66,5 +66,38 @@ export const useCheckInputStyles = makeStyles(theme => ({
     fontWeight: '400',
     marginLeft: 6,
     paddingRight: 80,
+  },
+}));
+
+export const useSelectDropdownStyles = makeStyles(theme => ({
+  button: {
+    height: 50,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: theme.colors.grey0,
+    backgroundColor: theme.colors.grey0,
+    paddingHorizontal: theme.spacing.md,
+    width: '100%',
+  },
+  text: {
+    textAlign: 'left',
+    color: theme.colors.black,
+    fontSize: 24,
+    letterSpacing: 0,
+  },
+  dropdown: {
+    backgroundColor: theme.colors.grey0,
+    borderWidth: 0,
+    borderBottomWidth: 0,
+    borderRadius: 15,
+  },
+  rowText: {
+    color: theme.colors.black,
+  },
+  selectedRow: {
+    backgroundColor: theme.colors.grey0,
+  },
+  selectedRowText: {
+    color: theme.colors.primary,
   },
 }));

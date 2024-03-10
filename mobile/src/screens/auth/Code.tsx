@@ -78,7 +78,7 @@ function Code({navigation}: Props & any) {
                 <TextInputMask
                   style={[textInputStyles.input]}
                   placeholder={'000-000'}
-                  placeholderTextColor={theme.colors.grey1}
+                  placeholderTextColor={theme.colors.grey2}
                   autoCapitalize="none"
                   keyboardType="number-pad"
                   underlineColorAndroid="#f000"
@@ -128,7 +128,7 @@ function Code({navigation}: Props & any) {
                   onPress={() => {
                     if (ready) {
                       AsyncStorage.setItem('code', code!).then(() => {
-                        navigation.replace('PrivateRouter');
+                        navigation.replace('Register');
                       });
                     } else if (!disabled) {
                       setSeconds(60);

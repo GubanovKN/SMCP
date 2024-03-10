@@ -17,6 +17,10 @@ export const useGridStyles = makeStyles(theme => ({
     paddingStart: theme.spacing.xl,
     paddingEnd: theme.spacing.xl,
   },
+  containerFluid: {
+    paddingStart: theme.spacing.md,
+    paddingEnd: theme.spacing.md,
+  },
   content: {
     marginTop: theme.spacing.md,
   },
