@@ -6,6 +6,9 @@ export const useTextStyles = makeStyles(theme => ({
     paddingHorizontal: 5,
     color: theme.colors.black,
   },
+  error: {
+    color: theme.colors.error,
+  },
   bold: {
     fontWeight: 'bold',
   },

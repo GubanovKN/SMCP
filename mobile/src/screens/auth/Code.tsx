@@ -10,11 +10,17 @@ import {useTheme, Text} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import {useGridStyles, useTextInputStyles, useButtonStyles} from '@styles';
+import {useAppDispatch, useAppSelector, authActions} from '@src-storage';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {
+  useGridStyles,
+  useTextStyles,
+  useTextInputStyles,
+  useButtonStyles,
+} from '@src-styles';
+
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'code';
 
@@ -23,28 +29,33 @@ type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 function Code({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {loginData, authData, error} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
+  const textStyles = useTextStyles();
   const textInputStyles = useTextInputStyles();
   const buttonStyles = useButtonStyles();
-  const [key, setKey] = useState<string | null>();
-  const [keyMasked, setKeyMasked] = useState<string | null>();
   const [code, setCode] = useState<string | undefined>();
   const [ready, setReady] = useState(false);
-  const [seconds, setSeconds] = useState(60);
+  const [seconds, setSeconds] = useState(loginData.timeRepeat || 60);
   const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
-    AsyncStorage.getItem('loginType').then(value => {
-      if (value !== null) {
-        AsyncStorage.getItem(value).then(keyValue => {
-          setKey(keyValue);
-        });
-        AsyncStorage.getItem(`${value}Show`).then(keyMaskedValue => {
-          setKeyMasked(keyMaskedValue);
-        });
+    if (!authData) {
+      if (loginData.password) {
+        if (loginData.exist) {
+          dispatch(authActions.login());
+        } else {
+          navigation.replace('Register');
+        }
       }
-    });
-  }, []);
+      if (loginData.timeRepeat) {
+        setSeconds(loginData.timeRepeat);
+      }
+    } else {
+      navigation.replace('PrivateRouter');
+    }
+  }, [loginData, authData, dispatch, navigation]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -66,6 +77,22 @@ function Code({navigation}: Props & any) {
     };
   }, [disabled]);
 
+  const handleChangeCode = (masked: string, unmasked: string | undefined) => {
+    dispatch(authActions.clearError());
+    setCode(unmasked);
+    setReady(!!unmasked);
+  };
+
+  const handleNext = () => {
+    if (ready) {
+      dispatch(authActions.setLoginCode(code!));
+      dispatch(authActions.checkCode());
+    } else if (!disabled) {
+      dispatch(authActions.sendCode({type: 'byphone'}));
+      setDisabled(true);
+    }
+  };
+
   return (
     <SafeAreaView style={[gridStyles.body]}>
       <Text style={gridStyles.header}>
@@ -78,11 +105,16 @@ function Code({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                {t(`${labelsAreaTranslation}.code.label`, {key: keyMasked})}
+                {t(`${labelsAreaTranslation}.code.label`, {
+                  key: loginData.usernameMasked,
+                })}
               </Text>
               <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
                 <TextInputMask
-                  style={[textInputStyles.input]}
+                  style={[
+                    textInputStyles.input,
+                    error ? textInputStyles.inputError : null,
+                  ]}
                   placeholder={'000-000'}
                   placeholderTextColor={theme.colors.grey2}
                   autoCapitalize="none"
@@ -90,13 +122,15 @@ function Code({navigation}: Props & any) {
                   underlineColorAndroid="#f000"
                   cursorColor={theme.colors.primary}
                   mask={'[000]-[000]'}
-                  onChangeText={(masked, unmasked) => {
-                    setCode(unmasked);
-                    setReady(unmasked?.length === 6);
-                  }}
+                  onChangeText={handleChangeCode}
                 />
               </View>
             </View>
+            {error ? (
+              <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
+                <Text style={[textStyles.base, textStyles.error]}>{error}</Text>
+              </View>
+            ) : null}
             <View
               style={[
                 gridStyles.blockFlexRow,
@@ -131,16 +165,7 @@ function Code({navigation}: Props & any) {
                   ]}
                   activeOpacity={0.5}
                   disabled={disabled && !ready}
-                  onPress={() => {
-                    if (ready) {
-                      AsyncStorage.setItem('code', code!).then(() => {
-                        navigation.replace('Register');
-                      });
-                    } else if (!disabled) {
-                      setSeconds(60);
-                      setDisabled(true);
-                    }
-                  }}>
+                  onPress={handleNext}>
                   <Text
                     style={[
                       buttonStyles.label,

@@ -1,22 +1,36 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from '@rneui/themed';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Home from '@screens/private/Home';
-import Favorite from '@screens/private/Favorite';
-import Messages from '@screens/private/Messages';
-import Profile from '@screens/private/Profile';
+import Home from '@src-screens/private/Home';
+import Favorite from '@src-screens/private/Favorite';
+import Messages from '@src-screens/private/Messages';
+import Profile from '@src-screens/private/Profile';
 
-import {useTabBarStyles} from '@styles';
+import {useAppSelector} from '@src-storage';
+
+import {useTabBarStyles} from '@src-styles';
+
+import {TabNavigationParamList} from '@src-types/navigation';
+
+type Props = NativeStackNavigationProp<TabNavigationParamList, 'Favorite'>;
 
 const Tab = createBottomTabNavigator();
 
-function PrivateRouter() {
+function PrivateRouter({navigation}: Props & any) {
   const {t} = useTranslation('privateRouter');
   const {theme} = useTheme();
+  const {authData} = useAppSelector(state => state.auth);
   const tabBarStyles = useTabBarStyles();
+
+  useEffect(() => {
+    if (!authData) {
+      navigation.replace('Splash');
+    }
+  }, [authData, navigation]);
 
   return (
     <Tab.Navigator

@@ -2,29 +2,31 @@ import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {useTheme} from '@rneui/themed';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Loading from '@custom-components/animated/Loading';
+import Loading from '@src-components/animated/Loading';
 
-import {useGridStyles} from '@styles';
+import {useAppSelector} from '@src-storage';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {useGridStyles} from '@src-styles';
+
+import {RootStackParamList} from '@src-types/navigation';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
 function Splash({navigation}: Props & any) {
   const {theme} = useTheme();
+  const {authData} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
 
   useEffect(() => {
     setTimeout(() => {
-      AsyncStorage.getItem('name').then(value => {
-        value
-          ? navigation.replace('PrivateRouter')
-          : navigation.replace('ChooseLanguage');
-      });
+      if (authData) {
+        navigation.replace('PrivateRouter');
+      } else {
+        navigation.replace('ChooseLanguage');
+      }
     }, 5000);
-  }, [navigation]);
+  }, [authData, navigation]);
 
   return (
     <View style={[gridStyles.body]}>

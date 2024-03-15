@@ -9,16 +9,15 @@ import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   useGridStyles,
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
-} from '@styles';
+} from '@src-styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'loginEmailPassword';
 
@@ -82,15 +81,7 @@ function LoginEmailPassword({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    AsyncStorage.multiSet([
-      ['loginType', 'email'],
-      ['loginConfirm', 'password'],
-      ['emailShow', email!],
-      ['email', email!],
-      ['password', password!],
-    ]).then(() => {
-      navigation.replace('PrivateRouter');
-    });
+    navigation.replace('PrivateRouter');
   };
 
   return (

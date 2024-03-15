@@ -3,12 +3,16 @@
   "compilerOptions": {
     "baseUrl": "./src/",
     "paths": {
-      "@screens/*": ["screens/*"],
-      "@routers/*": ["routers/*"],
-      "@custom-components/*": ["components/*"],
-      "@app-types/*": ["types/*"],
-      "@styles": ["styles/index"],
-      "@translations": ["translations/index"]
+      "@src-screens/*": ["screens/*"],
+      "@src-routers/*": ["routers/*"],
+      "@src-components/*": ["components/*"],
+      "@src-styles": ["styles/index"],
+      "@src-translations": ["translations/index"],
+      "@src-types/*": ["types/*"],
+      "@src-storage": ["storage/redux/index"],
+      "@src-storage-mmkv": ["storage/mmkv/index"],
+      "@src-helpers/*": ["helpers/*"],
+      "@src-common/*": ["common/*"]
     }
   }
 }

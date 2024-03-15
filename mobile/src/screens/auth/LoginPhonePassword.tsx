@@ -10,16 +10,15 @@ import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   useGridStyles,
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
-} from '@styles';
+} from '@src-styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'loginPhonePassword';
 
@@ -82,15 +81,7 @@ function LoginPhonePassword({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    AsyncStorage.multiSet([
-      ['loginType', 'phone'],
-      ['loginConfirm', 'password'],
-      ['phoneShow', phoneMasked!],
-      ['phone', phone!],
-      ['password', password!],
-    ]).then(() => {
-      navigation.replace('PrivateRouter');
-    });
+    navigation.replace('PrivateRouter');
   };
 
   return (

@@ -9,16 +9,15 @@ import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   useGridStyles,
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
-} from '@styles';
+} from '@src-styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'loginEmail';
 
@@ -71,14 +70,7 @@ function LoginEmail({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    AsyncStorage.multiSet([
-      ['loginType', 'email'],
-      ['loginConfirm', 'token'],
-      ['emailShow', email!],
-      ['email', email!],
-    ]).then(() => {
-      navigation.replace('Code');
-    });
+    navigation.replace('Code');
   };
 
   return (

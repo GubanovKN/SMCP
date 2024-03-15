@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '@screens/shared/Layout';
+import Layout from '@src-screens/shared/Layout';
 
 function App() {
   return <Layout />;

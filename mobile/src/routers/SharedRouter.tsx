@@ -1,16 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
+import {useThemeMode} from '@rneui/themed';
 
-import Splash from '@screens/shared/Splash';
-import ChooseLanguage from '@screens/shared/ChooseLanguage';
-import LoginPhone from '@screens/auth/LoginPhone';
-import Code from '@screens/auth/Code';
-import Register from '@screens/auth/Register';
-import PrivateRouter from '@routers/PrivateRouter';
+import {useAppSelector} from '@src-storage';
+
+import Splash from '@src-screens/shared/Splash';
+import ChooseLanguage from '@src-screens/shared/ChooseLanguage';
+import LoginPhone from '@src-screens/auth/LoginPhone';
+import Code from '@src-screens/auth/Code';
+import Register from '@src-screens/auth/Register';
+import PrivateRouter from '@src-routers/PrivateRouter';
 
 const Stack = createStackNavigator();
 
 function SharedRouter() {
+  const {i18n} = useTranslation();
+  const {mode, setMode} = useThemeMode();
+  const {language, theme} = useAppSelector(state => state.settings);
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+    if (mode !== theme) {
+      setMode(theme);
+    }
+  }, [i18n, language, setMode, mode, theme]);
+
   return (
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen

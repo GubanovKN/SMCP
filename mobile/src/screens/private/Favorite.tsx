@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {TabNavigationParamList} from '@app-types/navigation';
+import {TabNavigationParamList} from '@src-types/navigation';
 
 type Props = NativeStackNavigationProp<TabNavigationParamList, 'Favorite'>;
 

@@ -1,17 +1,19 @@
 import React from 'react';
 import {View, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
-import {useTranslation} from 'react-i18next';
 import {Text} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useGridStyles, useButtonStyles} from '@styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {useAppDispatch, settingsActions} from '@src-storage';
+
+import {useGridStyles, useButtonStyles} from '@src-styles';
+
+import {RootStackParamList} from '@src-types/navigation';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 function ChooseLanguage({navigation}: Props & any) {
-  const {i18n} = useTranslation('sharedRouter');
+  const dispatch = useAppDispatch();
   const gridStyles = useGridStyles();
   const buttonStyles = useButtonStyles();
 
@@ -25,7 +27,7 @@ function ChooseLanguage({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  i18n.changeLanguage('en');
+                  dispatch(settingsActions.setLanguage('en'));
                   navigation.replace('Login');
                 }}>
                 <Text style={[buttonStyles.label]}>English</Text>
@@ -38,7 +40,7 @@ function ChooseLanguage({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  i18n.changeLanguage('ru');
+                  dispatch(settingsActions.setLanguage('ru'));
                   navigation.replace('Login');
                 }}>
                 <Text style={[buttonStyles.label]}>Русский</Text>

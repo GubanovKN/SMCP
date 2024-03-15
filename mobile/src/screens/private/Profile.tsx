@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   View,
@@ -11,16 +11,22 @@ import {useTranslation} from 'react-i18next';
 import {useThemeMode, useTheme, Avatar, AirbnbRating} from '@rneui/themed';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {
+  useAppSelector,
+  useAppDispatch,
+  authActions,
+  settingsActions,
+} from '@src-storage';
 
 import {
   useButtonStyles,
   useGridStyles,
   useAvatarStyles,
   useTextStyles,
-} from '@styles';
+} from '@src-styles';
 
-import {TabNavigationParamList} from '@app-types/navigation';
+import {TabNavigationParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'profile.inner';
 
@@ -28,12 +34,24 @@ type Props = NativeStackNavigationProp<TabNavigationParamList, 'Profile'>;
 
 function Profile({navigation}: Props & any) {
   const {i18n, t} = useTranslation('privateRouter');
-  const {mode, setMode} = useThemeMode();
+  const {mode} = useThemeMode();
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {authData} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
   const buttonStyles = useButtonStyles();
   const avatarStyles = useAvatarStyles();
   const textStyles = useTextStyles();
+
+  useEffect(() => {
+    if (!authData) {
+      navigation.navigate('Splash');
+    }
+  }, [authData, navigation]);
+
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+  };
 
   return (
     <SafeAreaView style={gridStyles.body}>
@@ -47,7 +65,11 @@ function Profile({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  i18n.changeLanguage(i18n.language === 'ru' ? 'en' : 'ru');
+                  dispatch(
+                    settingsActions.setLanguage(
+                      i18n.language === 'ru' ? 'en' : 'ru',
+                    ),
+                  );
                 }}>
                 <Text style={buttonStyles.label}>
                   {i18n.language === 'ru' ? 'RU' : 'EN'}
@@ -59,7 +81,11 @@ function Profile({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  setMode(mode === 'dark' ? 'light' : 'dark');
+                  dispatch(
+                    settingsActions.setTheme(
+                      mode === 'dark' ? 'light' : 'dark',
+                    ),
+                  );
                 }}>
                 <MaterialCommunityIcons
                   name={
@@ -98,11 +124,7 @@ function Profile({navigation}: Props & any) {
               <TouchableOpacity
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
-                onPress={() => {
-                  AsyncStorage.clear().then(() => {
-                    navigation.replace('Splash');
-                  });
-                }}>
+                onPress={handleLogout}>
                 <MaterialCommunityIcons
                   name="logout"
                   size={25}

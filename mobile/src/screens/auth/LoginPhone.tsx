@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -10,16 +10,17 @@ import {useTheme, Text, CheckBox} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {useAppDispatch, useAppSelector, authActions} from '@src-storage';
 
 import {
   useGridStyles,
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
-} from '@styles';
+} from '@src-styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'loginPhone';
 
@@ -33,6 +34,8 @@ type FormData = {
 function LoginPhone({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {loginData} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
@@ -41,6 +44,16 @@ function LoginPhone({navigation}: Props & any) {
   const [phone, setPhone] = useState<string | undefined>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
+
+  useEffect(() => {
+    if (loginData.username) {
+      setPhone(loginData.username);
+    }
+    if (loginData.usernameMasked) {
+      setPhoneMasked(loginData.usernameMasked);
+    }
+    setChecked(loginData.privacyPolicy);
+  }, [loginData]);
 
   const changePhone = (masked: string, unmasked: string | undefined) => {
     setErrors({...errors, phone: undefined});
@@ -71,12 +84,18 @@ function LoginPhone({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    AsyncStorage.multiSet([
-      ['loginType', 'phone'],
-      ['loginConfirm', 'token'],
-      ['phoneShow', phoneMasked!],
-      ['phone', phone!],
-    ]).then(() => {
+    dispatch(
+      authActions.setLoginUsername({
+        username: phone!,
+        usernameMasked: phoneMasked!,
+      }),
+    );
+    dispatch(authActions.setLoginPrivacyPolicy(checked));
+    dispatch(
+      authActions.sendCode({
+        type: 'byphone',
+      }),
+    ).then(() => {
       navigation.replace('Code');
     });
   };
@@ -108,6 +127,7 @@ function LoginPhone({navigation}: Props & any) {
                 cursorColor={theme.colors.primary}
                 mask={'+7 ([000]) [000]-[00]-[00]'}
                 onChangeText={changePhone}
+                value={phoneMasked}
               />
             </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>

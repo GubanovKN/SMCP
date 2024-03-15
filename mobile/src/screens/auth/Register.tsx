@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,26 +13,102 @@ import SelectDropdown from 'react-native-select-dropdown';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {useAppDispatch, useAppSelector, authActions} from '@src-storage';
+
 import {
   useButtonStyles,
   useGridStyles,
   useTextInputStyles,
   useSelectDropdownStyles,
-} from '@styles';
+  useTextStyles,
+} from '@src-styles';
 
-import {RootStackParamList} from '@app-types/navigation';
+import {RootStackParamList} from '@src-types/navigation';
 
 const labelsAreaTranslation = 'register';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Register'>;
 
+type FormData = {
+  lastName?: string;
+  firstName?: string;
+  middleName?: string;
+  sex?: string;
+};
+
 function Register({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {loginData, authData, error} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
+  const textStyles = useTextStyles();
   const textInputStyles = useTextInputStyles();
   const buttonStyles = useButtonStyles();
   const selectDropdownStyles = useSelectDropdownStyles();
+  const [lastName, setLastName] = useState<string>();
+  const [firstName, setFirstName] = useState<string>();
+  const [middleName, setMiddleName] = useState<string>();
+  const [sex, setSex] = useState<number>(0);
+  const [errors, setErrors] = useState<FormData>({});
+
+  useEffect(() => {
+    if (authData) {
+      navigation.navigate('PrivateRouter');
+    }
+  }, [authData, navigation]);
+
+  const handleChangeLastName = (value: string) => {
+    setErrors({...errors, lastName: undefined});
+    setLastName(value);
+  };
+
+  const handleChangeFirstName = (value: string) => {
+    setErrors({...errors, firstName: undefined});
+    setFirstName(value);
+  };
+
+  const handleChangeMiddleName = (value: string) => {
+    setErrors({...errors, middleName: undefined});
+    setMiddleName(value);
+  };
+
+  const handleChangeSex = (label: string, value: number) => {
+    setErrors({...errors, sex: undefined});
+    setSex(value);
+  };
+
+  const validateForm = () => {
+    let currentErrors: FormData = {};
+
+    if (!lastName) {
+      currentErrors.lastName = t(`${labelsAreaTranslation}.lastName.error`);
+    }
+
+    if (!firstName) {
+      currentErrors.firstName = t(`${labelsAreaTranslation}.firstName.error`);
+    }
+
+    setErrors(currentErrors);
+    if (Object.keys(currentErrors).length === 0) {
+      submitForm();
+    }
+  };
+
+  const submitForm = () => {
+    dispatch(
+      authActions.setRegisterData({
+        type: 'phone',
+        lastName: lastName!,
+        firstName: firstName!,
+        middleName,
+        sex,
+        phone: loginData.username,
+        phoneToken: loginData.password,
+      }),
+    );
+    dispatch(authActions.register());
+  };
 
   return (
     <SafeAreaView style={gridStyles.body}>
@@ -49,7 +125,10 @@ function Register({navigation}: Props & any) {
                 {t(`${labelsAreaTranslation}.lastname.label`)}
               </Text>
               <Input
-                style={textInputStyles.input}
+                style={[
+                  textInputStyles.input,
+                  errors.lastName ? textInputStyles.inputError : null,
+                ]}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
@@ -57,9 +136,10 @@ function Register({navigation}: Props & any) {
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
-                keyboardType="email-address"
+                keyboardType="default"
                 returnKeyType="next"
                 underlineColorAndroid="transparent"
+                onChangeText={handleChangeLastName}
               />
             </View>
             <View style={gridStyles.blockFlex}>
@@ -67,7 +147,10 @@ function Register({navigation}: Props & any) {
                 {t(`${labelsAreaTranslation}.name.label`)}
               </Text>
               <Input
-                style={textInputStyles.input}
+                style={[
+                  textInputStyles.input,
+                  errors.firstName ? textInputStyles.inputError : null,
+                ]}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
@@ -75,9 +158,10 @@ function Register({navigation}: Props & any) {
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
-                keyboardType="email-address"
+                keyboardType="default"
                 returnKeyType="next"
                 underlineColorAndroid="transparent"
+                onChangeText={handleChangeFirstName}
               />
             </View>
             <View style={gridStyles.blockFlex}>
@@ -85,7 +169,10 @@ function Register({navigation}: Props & any) {
                 {t(`${labelsAreaTranslation}.middlename.label`)}
               </Text>
               <Input
-                style={textInputStyles.input}
+                style={[
+                  textInputStyles.input,
+                  errors.middleName ? textInputStyles.inputError : null,
+                ]}
                 containerStyle={textInputStyles.container}
                 inputContainerStyle={textInputStyles.container}
                 cursorColor={theme.colors.primary}
@@ -95,27 +182,10 @@ function Register({navigation}: Props & any) {
                 placeholderTextColor={theme.colors.grey2}
                 errorStyle={textInputStyles.inputErrorMessageNone}
                 autoCapitalize="none"
-                keyboardType="email-address"
+                keyboardType="default"
                 returnKeyType="next"
                 underlineColorAndroid="transparent"
-              />
-            </View>
-            <View style={gridStyles.blockFlex}>
-              <Text style={textInputStyles.label}>
-                {t(`${labelsAreaTranslation}.email.label`)}
-              </Text>
-              <Input
-                style={textInputStyles.input}
-                containerStyle={textInputStyles.container}
-                inputContainerStyle={textInputStyles.container}
-                cursorColor={theme.colors.primary}
-                placeholder={t(`${labelsAreaTranslation}.email.placeholder`)}
-                placeholderTextColor={theme.colors.grey2}
-                errorStyle={textInputStyles.inputErrorMessageNone}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                returnKeyType="next"
-                underlineColorAndroid="transparent"
+                onChangeText={handleChangeMiddleName}
               />
             </View>
             <View style={gridStyles.blockFlex}>
@@ -144,11 +214,14 @@ function Register({navigation}: Props & any) {
                     />
                   );
                 }}
-                onSelect={(selectedItem, index) => {
-                  console.log(selectedItem, index);
-                }}
+                onSelect={handleChangeSex}
               />
             </View>
+            {error ? (
+              <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
+                <Text style={[textStyles.base, textStyles.error]}>{error}</Text>
+              </View>
+            ) : null}
             <View
               style={[
                 gridStyles.blockFlex,
@@ -158,7 +231,7 @@ function Register({navigation}: Props & any) {
               <TouchableOpacity
                 style={[buttonStyles.button, buttonStyles.buttonPrimary]}
                 activeOpacity={0.5}
-                onPress={() => navigation.replace('PrivateRouter')}>
+                onPress={validateForm}>
                 <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
                   {t(`${labelsAreaTranslation}.continue.label`)}
                 </Text>
