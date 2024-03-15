@@ -17,6 +17,7 @@
 - [ ] Push notification
 - [ ] Communication with server
 - [ ] Disable auto rotate
+- [ ] Storage data
 - [x] Change language
 - [ ] Add cookiecutter
 ## How build for development
@@ -38,3 +39,4 @@
  3. [React Native Select Dropdown](https://github.com/AdelRedaa97/react-native-select-dropdown)
  4. [React Native SVG](https://github.com/software-mansion/react-native-svg)
  5. [React Native Text Input Mask](https://github.com/react-native-text-input-mask/react-native-text-input-mask)
+ 6. [React Native MMKV Storage](https://github.com/ammarahm-ed/react-native-mmkv-storage)
