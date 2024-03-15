@@ -16,8 +16,8 @@
 - [x] Change theme
 - [ ] Push notification
 - [ ] Communication with server
-- [ ] Disable auto rotate
-- [ ] Storage data
+- [x] Disable auto rotate
+- [x] Storage data
 - [x] Change language
 - [ ] Add cookiecutter
 ## How build for development
@@ -31,6 +31,9 @@
 ## How add fonts
  - For Android copy font in ```android/app/src/main/assets/fonts```
  - For IOS copy font in ```ios/{project_name}/Fonts```
+## How disable autorotate
+ - For Andorid add attribute ```android:screenOrientation="portrait"``` in ```android/app/src/main/AndroidManifest.xml``` (MainActivity tag)
+ - For IOS delete other orientation except ```<string>UIInterfaceOrientationPortrait</string>``` in array tag from ```ios/mobile/Info.plist``` (after <key>UISupportedInterfaceOrientations</key>)
 ## Server
  This template will prepare for communication with template server [ASP NET Core Backend Template](https://github.com/GubanovKN/aspnetcore-backend-template)
 ## Used in the template
