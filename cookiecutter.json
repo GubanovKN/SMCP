@@ -1,0 +1,5 @@
+{
+  "base_url": "http://your-domain.com",
+  "login_type": "phone",
+  "use_password": "true"
+}
