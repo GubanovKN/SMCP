@@ -1,5 +1,6 @@
 # React Native Mobile Template
-<span style="color:red">WARNING: Template in development</span>
+## What is this
+ This is a template mobile application written in React Native. This is all my experience when I first created a mobile app. There will be new versions in this repository when I have problems and resolve.
 ## Current tasks
 - [x] Splash screen
 - [x] Login phone screen
@@ -9,17 +10,24 @@
 - [x] Register screen
 - [x] Navigation
 - [x] Bottom tab bar
-- [ ] Home screen
-- [ ] Favorite screen
-- [ ] Messages screen
+- [X] Home screen
+- [X] Favorite screen
+- [X] Messages screen
 - [x] Profile screen
 - [x] Change theme
-- [ ] Push notification
-- [ ] Communication with server
+- [x] Communication with server
 - [x] Disable auto rotate
 - [x] Storage data
 - [x] Change language
-- [ ] Add cookiecutter
+- [x] Add cookiecutter
+- [ ] Google OAuth
+- [ ] Apple OAuth
+- [ ] Push notification
+- [ ] Messages
+## Setup
+ 1. Use cookiecutter for first config cookiecutter ```https://github.com/GubanovKN/native-mobile-template.git```
+ 2. Parameter login_type in env has two values type "phone" or "email"
+ 3. Parameter use_password in env is boolean
 ## How build for development
  1. For IOS need open terminal in main project path and execute ```cd ios && pod install```
  2. For Android need add lines in ```~/.bash_profile``` and each deploy run ```source ~/.bash_profile```
@@ -43,3 +51,4 @@
  4. [React Native SVG](https://github.com/software-mansion/react-native-svg)
  5. [React Native Text Input Mask](https://github.com/react-native-text-input-mask/react-native-text-input-mask)
  6. [React Native MMKV Storage](https://github.com/ammarahm-ed/react-native-mmkv-storage)
+ 7. [React Native DotENV](https://github.com/goatandsheep/react-native-dotenv)
