@@ -1,27 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {View, Text, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {useGridStyles} from '@src-styles';
+
+const labelsAreaTranslation = 'home.inner';
 
 function Home() {
-  const [name, setName] = useState('');
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('name');
-      if (value !== null) {
-        setName(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const {t} = useTranslation('privateRouter');
+  const gridStyles = useGridStyles();
 
   return (
-    <View style={styles.mainBody}>
-      <Text style={styles.text}>Добро пожаловать, {name}</Text>
+    <View style={gridStyles.body}>
+      <Text style={styles.text}>
+        {t(`${labelsAreaTranslation}.welcomeMessage`)}
+      </Text>
     </View>
   );
 }

@@ -1,0 +1,177 @@
+{
+  "sharedRouter": {
+    "loginPhone": {
+      "title": "Login",
+      "phone": {
+        "label": "Enter your phone number",
+        "error": "Invalid phone number"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "loginPhonePassword": {
+      "title": "Login",
+      "phone": {
+        "label": "Enter your phone number",
+        "error": "Invalid phone number"
+      },
+      "password": {
+        "label": "Enter your password",
+        "error": "Invalid password"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "forgot": {
+        "label": "Not account/Forgot password?"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "loginEmail": {
+      "title": "Login",
+      "email": {
+        "label": "Enter your email",
+        "error": "Invalid email"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "loginEmailPassword": {
+      "title": "Login",
+      "email": {
+        "label": "Enter your email",
+        "error": "Invalid email"
+      },
+      "password": {
+        "label": "Enter your password",
+        "error": "Invalid password"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "forgot": {
+        "label": "Not account/Forgot password?"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "sendCode": {
+      "title": "Send code",
+      "phone": {
+        "label": "Enter your phone number"
+      },
+      "email": {
+        "label": "Enter your email"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "back": {
+        "label": "Back"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "code": {
+      "title": "Code",
+      "code": {
+        "label": "Send to {{key}}"
+      },
+      "back": {
+        "label": "Back"
+      },
+      "repeat": {
+        "label": "Repeat"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "newPassword": {
+      "title": "New password",
+      "password": {
+        "label": "Enter your new password",
+        "placeholder": "Your new password"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "register": {
+      "title": "Register",
+      "lastname": {
+        "label": "Enter your last name",
+        "placeholder": "Your last name"
+      },
+      "name": {
+        "label": "Enter your name",
+        "placeholder": "Your name"
+      },
+      "middlename": {
+        "label": "Enter your middle name",
+        "placeholder": "Your middle name"
+      },
+      "email": {
+        "label": "Enter your email",
+        "placeholder": "Your email"
+      },
+      "password": {
+        "label": "Enter your password",
+        "placeholder": "Your password"
+      },
+      "sex": {
+        "label": "Enter your sex",
+        "man": "Man",
+        "woman": "Woman"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    }
+  },
+  "privateRouter": {
+    "home": {
+      "title": "Home",
+      "tabBarLabel": "Home",
+      "inner": {
+        "welcomeMessage": "Welcome!"
+      }
+    },
+    "favorite": {
+      "title": "Favorite",
+      "tabBarLabel": "Favorite",
+      "inner": {}
+    },
+    "messages": {
+      "title": "Messages",
+      "tabBarLabel": "Messages",
+      "inner": {}
+    },
+    "profile": {
+      "title": "Profile",
+      "tabBarLabel": "Profile"
+    }
+  }
+}

@@ -1,48 +1,38 @@
-import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
+import {useTheme} from '@rneui/themed';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {RootStackParamList} from '@app-types/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loading from '@src-components/animated/Loading';
+
+import {useAppSelector} from '@src-storage';
+
+import {useGridStyles} from '@src-styles';
+
+import {RootStackParamList} from '@src-types/navigation';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
 function Splash({navigation}: Props & any) {
-  const [animating, setAnimating] = useState(true);
+  const {theme} = useTheme();
+  const {authData} = useAppSelector(state => state.auth);
+  const gridStyles = useGridStyles();
+
   useEffect(() => {
     setTimeout(() => {
-      setAnimating(false);
-      AsyncStorage.getItem('name').then(value => {
-        value
-          ? navigation.replace('PrivateRouter')
-          : navigation.replace('Login');
-      });
+      if (authData) {
+        navigation.navigate('PrivateRouter');
+      } else {
+        navigation.navigate('ChooseLanguage');
+      }
     }, 5000);
-  }, [navigation]);
+  }, [authData, navigation]);
 
   return (
-    <View style={styles.container}>
-      <ActivityIndicator
-        animating={animating}
-        color="#FFFFFF"
-        size="large"
-        style={styles.activityIndicator}
-      />
+    <View style={[gridStyles.body]}>
+      <Loading color={theme.colors.primary} size={45} width={12} />
     </View>
   );
 }
 
 export default Splash;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#307ecc',
-  },
-  activityIndicator: {
-    alignItems: 'center',
-    height: 80,
-  },
-});

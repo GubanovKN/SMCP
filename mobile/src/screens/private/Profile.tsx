@@ -1,74 +1,163 @@
 import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useTranslation} from 'react-i18next';
+import {useThemeMode, useTheme, Avatar, AirbnbRating} from '@rneui/themed';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {TabNavigationParamList} from '@app-types/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  useAppSelector,
+  useAppDispatch,
+  authActions,
+  settingsActions,
+} from '@src-storage';
 
-type Props = NativeStackNavigationProp<TabNavigationParamList, 'Profile'>;
+import {
+  useButtonStyles,
+  useGridStyles,
+  useAvatarStyles,
+  useTextStyles,
+} from '@src-styles';
 
-function Profile({navigation}: Props & any) {
+function Profile() {
+  const {i18n} = useTranslation('privateRouter');
+  const {mode} = useThemeMode();
+  const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {info} = useAppSelector(state => state.user);
+  const gridStyles = useGridStyles();
+  const buttonStyles = useButtonStyles();
+  const avatarStyles = useAvatarStyles();
+  const textStyles = useTextStyles();
+
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+  };
+
   return (
-    <View style={styles.mainBody}>
+    <SafeAreaView style={gridStyles.body}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.contentContainerStyle}>
-        <View>
-          <KeyboardAvoidingView enabled>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={() => {
-                AsyncStorage.clear().then(() => {
-                  navigation.replace('Splash');
-                });
-              }}>
-              <Text style={styles.buttonTextStyle}>Выйти</Text>
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
+        contentContainerStyle={gridStyles.containerFluid}>
+        <View style={gridStyles.content}>
+          <View style={[gridStyles.blockFlexRow, gridStyles.justifyEnd]}>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}
+                onPress={() => {
+                  dispatch(
+                    settingsActions.setLanguage(
+                      i18n.language === 'ru' ? 'en' : 'ru',
+                    ),
+                  );
+                }}>
+                <Text style={buttonStyles.label}>
+                  {i18n.language === 'ru' ? 'RU' : 'EN'}
+                </Text>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}
+                onPress={() => {
+                  dispatch(
+                    settingsActions.setTheme(
+                      mode === 'dark' ? 'light' : 'dark',
+                    ),
+                  );
+                }}>
+                <MaterialCommunityIcons
+                  name={
+                    mode === 'dark'
+                      ? 'white-balance-sunny'
+                      : 'moon-waxing-crescent'
+                  }
+                  size={25}
+                  color={theme.colors.black}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}>
+                <MaterialCommunityIcons
+                  name="bell"
+                  size={25}
+                  color={theme.colors.black}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}>
+                <MaterialCommunityIcons
+                  name="menu"
+                  size={25}
+                  color={theme.colors.black}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+            <KeyboardAvoidingView enabled>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}
+                onPress={handleLogout}>
+                <MaterialCommunityIcons
+                  name="logout"
+                  size={25}
+                  color={theme.colors.black}
+                />
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+          </View>
+          <View
+            style={[
+              gridStyles.blockFlexRow,
+              gridStyles.justifyStart,
+              gridStyles.alignCenter,
+            ]}>
+            <Avatar
+              size={82}
+              rounded
+              title={info?.firstName[0]}
+              containerStyle={[
+                avatarStyles.container,
+                {marginEnd: theme.spacing.sm},
+              ]}
+              titleStyle={avatarStyles.title}
+            />
+          </View>
+          <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>
+            <Text style={[textStyles.base, textStyles.h2]}>
+              {`${info?.firstName} ${info?.lastName}`}
+            </Text>
+          </View>
+          <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>
+            <Text style={[textStyles.base, textStyles.bold, textStyles.h3]}>
+              4.3
+            </Text>
+            <AirbnbRating
+              count={5}
+              defaultRating={4}
+              size={16}
+              isDisabled
+              showRating={false}
+            />
+          </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 
 export default Profile;
-
-const styles = StyleSheet.create({
-  mainBody: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    alignContent: 'center',
-  },
-  contentContainerStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  buttonStyle: {
-    backgroundColor: '#7DE24E',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 45,
-    marginRight: 45,
-    marginTop: 20,
-    marginBottom: 25,
-  },
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
-  },
-});
