@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -9,6 +9,8 @@ import {useTranslation} from 'react-i18next';
 import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+import {useAppDispatch, useAppSelector, authActions} from '@src-storage';
 
 import {
   useGridStyles,
@@ -34,6 +36,8 @@ const re =
 function LoginEmail({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {loginData} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
@@ -41,6 +45,13 @@ function LoginEmail({navigation}: Props & any) {
   const [email, setEmail] = useState<string | undefined>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
+
+  useEffect(() => {
+    if (loginData.username) {
+      setEmail(loginData.username);
+    }
+    setChecked(loginData.privacyPolicy);
+  }, [loginData]);
 
   const changeEmail = (value: string) => {
     setErrors({...errors, email: undefined});
@@ -70,7 +81,20 @@ function LoginEmail({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    navigation.replace('Code');
+    dispatch(
+      authActions.setLoginUsername({
+        username: email!,
+        usernameMasked: email!,
+      }),
+    );
+    dispatch(authActions.setLoginPrivacyPolicy(checked));
+    dispatch(
+      authActions.sendCode({
+        type: 'byemail',
+      }),
+    ).then(() => {
+      navigation.navigate('Code');
+    });
   };
 
   return (

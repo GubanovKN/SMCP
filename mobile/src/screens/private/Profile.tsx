@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   View,
@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {useThemeMode, useTheme, Avatar, AirbnbRating} from '@rneui/themed';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -26,28 +25,16 @@ import {
   useTextStyles,
 } from '@src-styles';
 
-import {TabNavigationParamList} from '@src-types/navigation';
-
-const labelsAreaTranslation = 'profile.inner';
-
-type Props = NativeStackNavigationProp<TabNavigationParamList, 'Profile'>;
-
-function Profile({navigation}: Props & any) {
-  const {i18n, t} = useTranslation('privateRouter');
+function Profile() {
+  const {i18n} = useTranslation('privateRouter');
   const {mode} = useThemeMode();
   const {theme} = useTheme();
   const dispatch = useAppDispatch();
-  const {authData} = useAppSelector(state => state.auth);
+  const {info} = useAppSelector(state => state.user);
   const gridStyles = useGridStyles();
   const buttonStyles = useButtonStyles();
   const avatarStyles = useAvatarStyles();
   const textStyles = useTextStyles();
-
-  useEffect(() => {
-    if (!authData) {
-      navigation.navigate('Splash');
-    }
-  }, [authData, navigation]);
 
   const handleLogout = () => {
     dispatch(authActions.logout());
@@ -142,24 +129,17 @@ function Profile({navigation}: Props & any) {
             <Avatar
               size={82}
               rounded
-              title={t(`${labelsAreaTranslation}.avatar.label`)}
+              title={info?.firstName[0]}
               containerStyle={[
                 avatarStyles.container,
                 {marginEnd: theme.spacing.sm},
               ]}
               titleStyle={avatarStyles.title}
             />
-            <Avatar
-              size={55}
-              rounded
-              title="+"
-              containerStyle={avatarStyles.container}
-              titleStyle={avatarStyles.title}
-            />
           </View>
           <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>
             <Text style={[textStyles.base, textStyles.h2]}>
-              {t(`${labelsAreaTranslation}.user.label`)}
+              {`${info?.firstName} ${info?.lastName}`}
             </Text>
           </View>
           <View style={[gridStyles.blockFlexRow, gridStyles.justifyStart]}>

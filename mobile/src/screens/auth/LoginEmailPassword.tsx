@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   ScrollView,
@@ -10,11 +10,14 @@ import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
+import {useAppDispatch, useAppSelector, authActions} from '@src-storage';
+
 import {
   useGridStyles,
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
+  useTextStyles,
 } from '@src-styles';
 
 import {RootStackParamList} from '@src-types/navigation';
@@ -35,7 +38,10 @@ const re =
 function LoginEmailPassword({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
+  const {loginData, authData, error} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
+  const textStyles = useTextStyles();
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
   const buttonStyles = useButtonStyles();
@@ -43,6 +49,19 @@ function LoginEmailPassword({navigation}: Props & any) {
   const [password, setPassword] = useState<string>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
+
+  useEffect(() => {
+    if (authData) {
+      navigation.navigate('PrivateRouter');
+    }
+  }, [authData, navigation]);
+
+  useEffect(() => {
+    if (loginData.username) {
+      setEmail(loginData.username);
+    }
+    setChecked(loginData.privacyPolicy);
+  }, [loginData]);
 
   const changeEmail = (value: string) => {
     setErrors({...errors, email: undefined});
@@ -81,7 +100,15 @@ function LoginEmailPassword({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    navigation.replace('PrivateRouter');
+    dispatch(
+      authActions.setLoginUsername({
+        username: email!,
+        usernameMasked: email!,
+      }),
+    );
+    dispatch(authActions.setLoginPassword(password!));
+    dispatch(authActions.setLoginPrivacyPolicy(checked));
+    dispatch(authActions.login());
   };
 
   return (
@@ -112,6 +139,7 @@ function LoginEmailPassword({navigation}: Props & any) {
                 underlineColorAndroid="#f000"
                 cursorColor={theme.colors.primary}
                 onChangeText={changeEmail}
+                value={email}
               />
             </View>
             <View style={[gridStyles.blockFlex]}>
@@ -159,12 +187,25 @@ function LoginEmailPassword({navigation}: Props & any) {
                 </Text>
               </View>
             </View>
+            {error ? (
+              <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
+                <Text style={[textStyles.base, textStyles.error]}>{error}</Text>
+              </View>
+            ) : null}
             <View
               style={[
-                gridStyles.blockFlex,
-                gridStyles.alignEnd,
+                gridStyles.blockFlexRow,
+                gridStyles.justifyBetween,
                 {marginTop: theme.spacing.sm, paddingBottom: theme.spacing.sm},
               ]}>
+              <TouchableOpacity
+                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
+                activeOpacity={0.5}
+                onPress={() => navigation.navigate('SendCodeEmail')}>
+                <Text style={[buttonStyles.label, textStyles.h6]}>
+                  {t(`${labelsAreaTranslation}.forgot.label`)}
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={[buttonStyles.button, buttonStyles.buttonPrimary]}
                 activeOpacity={0.5}

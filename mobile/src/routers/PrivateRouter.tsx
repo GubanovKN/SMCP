@@ -10,7 +10,7 @@ import Favorite from '@src-screens/private/Favorite';
 import Messages from '@src-screens/private/Messages';
 import Profile from '@src-screens/private/Profile';
 
-import {useAppSelector} from '@src-storage';
+import {useAppSelector, useAppDispatch, userActions} from '@src-storage';
 
 import {useTabBarStyles} from '@src-styles';
 
@@ -23,12 +23,17 @@ const Tab = createBottomTabNavigator();
 function PrivateRouter({navigation}: Props & any) {
   const {t} = useTranslation('privateRouter');
   const {theme} = useTheme();
+  const dispatch = useAppDispatch();
   const {authData} = useAppSelector(state => state.auth);
   const tabBarStyles = useTabBarStyles();
 
   useEffect(() => {
+    dispatch(userActions.me());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!authData) {
-      navigation.replace('Splash');
+      navigation.navigate('Splash');
     }
   }, [authData, navigation]);
 

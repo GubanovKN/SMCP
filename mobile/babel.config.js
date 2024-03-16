@@ -34,5 +34,6 @@ module.exports = {
         alias: getAliases(),
       },
     ],
+    ['module:react-native-dotenv'],
   ],
 };

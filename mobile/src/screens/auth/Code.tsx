@@ -21,10 +21,11 @@ import {
 } from '@src-styles';
 
 import {RootStackParamList} from '@src-types/navigation';
+import {USE_PASSWORD} from '@src-common/constants';
 
 const labelsAreaTranslation = 'code';
 
-type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+type Props = NativeStackNavigationProp<RootStackParamList, 'Code'>;
 
 function Code({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
@@ -44,16 +45,20 @@ function Code({navigation}: Props & any) {
     if (!authData) {
       if (loginData.password) {
         if (loginData.exist) {
-          dispatch(authActions.login());
+          if (USE_PASSWORD) {
+            navigation.navigate('NewPassword');
+          } else {
+            dispatch(authActions.login());
+          }
         } else {
-          navigation.replace('Register');
+          navigation.navigate('Register');
         }
       }
       if (loginData.timeRepeat) {
         setSeconds(loginData.timeRepeat);
       }
     } else {
-      navigation.replace('PrivateRouter');
+      navigation.navigate('PrivateRouter');
     }
   }, [loginData, authData, dispatch, navigation]);
 
@@ -145,7 +150,7 @@ function Code({navigation}: Props & any) {
                   style={[buttonStyles.button, buttonStyles.buttonSecondary]}
                   activeOpacity={0.5}
                   onPress={() => {
-                    navigation.replace('Login');
+                    navigation.goBack();
                   }}>
                   <Text
                     style={[buttonStyles.label, buttonStyles.labelSecondary]}>

@@ -1,14 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {TabNavigationParamList} from '@src-types/navigation';
+import {useGridStyles} from '@src-styles';
 
-type Props = NativeStackNavigationProp<TabNavigationParamList, 'Favorite'>;
+function Favorite() {
+  const gridStyles = useGridStyles();
 
-function Favorite({navigation}: Props & any) {
   return (
-    <View style={styles.mainBody}>
+    <View style={gridStyles.body}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.contentContainerStyle}>

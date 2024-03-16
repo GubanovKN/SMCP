@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {useTheme, Text, CheckBox, Input} from '@rneui/themed';
+import {useTheme, Text, CheckBox} from '@rneui/themed';
 import TextInputMask from 'react-native-text-input-mask';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -18,63 +18,47 @@ import {
   useTextInputStyles,
   useCheckInputStyles,
   useButtonStyles,
-  useTextStyles,
 } from '@src-styles';
 
 import {RootStackParamList} from '@src-types/navigation';
 
-const labelsAreaTranslation = 'loginPhonePassword';
+const labelsAreaTranslation = 'sendCode';
 
-type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+type Props = NativeStackNavigationProp<RootStackParamList, 'SendCode'>;
 
 type FormData = {
   phone?: string;
-  password?: string;
   checked?: string;
 };
 
-function LoginPhonePassword({navigation}: Props & any) {
+function SendCodePhone({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const dispatch = useAppDispatch();
-  const {loginData, authData, error} = useAppSelector(state => state.auth);
+  const {loginData} = useAppSelector(state => state.auth);
   const gridStyles = useGridStyles();
-  const textStyles = useTextStyles();
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
   const buttonStyles = useButtonStyles();
   const [phoneMasked, setPhoneMasked] = useState<string>();
   const [phone, setPhone] = useState<string | undefined>();
-  const [password, setPassword] = useState<string>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
 
   useEffect(() => {
-    if (authData) {
-      navigation.navigate('PrivateRouter');
-    }
-  }, [authData, navigation]);
-
-  useEffect(() => {
-    console.log(loginData);
     if (loginData.username) {
       setPhone(loginData.username);
     }
     if (loginData.usernameMasked) {
       setPhoneMasked(loginData.usernameMasked);
     }
-    setChecked(loginData.privacyPolicy);
-  }, [loginData]);
+    dispatch(authActions.setLoginPassword());
+  }, [loginData, dispatch]);
 
   const changePhone = (masked: string, unmasked: string | undefined) => {
     setErrors({...errors, phone: undefined});
     setPhoneMasked(masked);
     setPhone(`7${unmasked}`);
-  };
-
-  const changePassword = (value: string) => {
-    setErrors({...errors, password: undefined});
-    setPassword(value);
   };
 
   const toggleCheckbox = () => {
@@ -87,10 +71,6 @@ function LoginPhonePassword({navigation}: Props & any) {
 
     if (!phone || phone.length !== 11) {
       currentErrors.phone = t(`${labelsAreaTranslation}.phone.error`);
-    }
-
-    if (!password) {
-      currentErrors.password = t(`${labelsAreaTranslation}.password.error`);
     }
 
     if (!checked) {
@@ -110,9 +90,14 @@ function LoginPhonePassword({navigation}: Props & any) {
         usernameMasked: phoneMasked!,
       }),
     );
-    dispatch(authActions.setLoginPassword(password!));
     dispatch(authActions.setLoginPrivacyPolicy(checked));
-    dispatch(authActions.login());
+    dispatch(
+      authActions.sendCode({
+        type: 'byphone',
+      }),
+    ).then(() => {
+      navigation.navigate('Code');
+    });
   };
 
   return (
@@ -145,27 +130,6 @@ function LoginPhonePassword({navigation}: Props & any) {
                 value={phoneMasked}
               />
             </View>
-            <View style={[gridStyles.blockFlex]}>
-              <Text style={[textInputStyles.label]}>
-                {t(`${labelsAreaTranslation}.password.label`)}
-              </Text>
-              <Input
-                style={[
-                  textInputStyles.input,
-                  errors.password ? textInputStyles.inputError : null,
-                ]}
-                containerStyle={textInputStyles.container}
-                inputContainerStyle={textInputStyles.container}
-                errorStyle={textInputStyles.inputErrorMessageNone}
-                textContentType="password"
-                autoCapitalize="none"
-                keyboardType="default"
-                underlineColorAndroid="#f000"
-                cursorColor={theme.colors.primary}
-                secureTextEntry={true}
-                onChangeText={changePassword}
-              />
-            </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>
               <CheckBox
                 checked={checked}
@@ -190,33 +154,35 @@ function LoginPhonePassword({navigation}: Props & any) {
                 </Text>
               </View>
             </View>
-            {error ? (
-              <View style={[gridStyles.blockFlex, gridStyles.alignCenter]}>
-                <Text style={[textStyles.base, textStyles.error]}>{error}</Text>
-              </View>
-            ) : null}
             <View
               style={[
                 gridStyles.blockFlexRow,
                 gridStyles.justifyBetween,
                 {marginTop: theme.spacing.sm, paddingBottom: theme.spacing.sm},
               ]}>
-              <TouchableOpacity
-                style={[buttonStyles.button, buttonStyles.buttonTransparent]}
-                activeOpacity={0.5}
-                onPress={() => navigation.navigate('SendCodePhone')}>
-                <Text style={[buttonStyles.label, textStyles.h6]}>
-                  {t(`${labelsAreaTranslation}.forgot.label`)}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[buttonStyles.button, buttonStyles.buttonPrimary]}
-                activeOpacity={0.5}
-                onPress={validateForm}>
-                <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
-                  {t(`${labelsAreaTranslation}.continue.label`)}
-                </Text>
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity
+                  style={[buttonStyles.button, buttonStyles.buttonSecondary]}
+                  activeOpacity={0.5}
+                  onPress={() => {
+                    navigation.goBack();
+                  }}>
+                  <Text
+                    style={[buttonStyles.label, buttonStyles.labelSecondary]}>
+                    {t(`${labelsAreaTranslation}.back.label`)}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity
+                  style={[buttonStyles.button, buttonStyles.buttonPrimary]}
+                  activeOpacity={0.5}
+                  onPress={validateForm}>
+                  <Text style={[buttonStyles.label, buttonStyles.labelPrimary]}>
+                    {t(`${labelsAreaTranslation}.continue.label`)}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </KeyboardAvoidingView>
         </View>
@@ -225,4 +191,4 @@ function LoginPhonePassword({navigation}: Props & any) {
   );
 }
 
-export default LoginPhonePassword;
+export default SendCodePhone;

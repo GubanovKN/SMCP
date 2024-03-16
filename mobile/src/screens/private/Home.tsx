@@ -2,13 +2,16 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text, StyleSheet} from 'react-native';
 
+import {useGridStyles} from '@src-styles';
+
 const labelsAreaTranslation = 'home.inner';
 
 function Home() {
   const {t} = useTranslation('privateRouter');
+  const gridStyles = useGridStyles();
 
   return (
-    <View style={styles.mainBody}>
+    <View style={gridStyles.body}>
       <Text style={styles.text}>
         {t(`${labelsAreaTranslation}.welcomeMessage`)}
       </Text>

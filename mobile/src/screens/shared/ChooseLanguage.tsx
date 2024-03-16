@@ -9,6 +9,7 @@ import {useAppDispatch, settingsActions} from '@src-storage';
 import {useGridStyles, useButtonStyles} from '@src-styles';
 
 import {RootStackParamList} from '@src-types/navigation';
+import {LOGIN_TYPE, USE_PASSWORD} from '@src-common/constants';
 
 type Props = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -16,6 +17,23 @@ function ChooseLanguage({navigation}: Props & any) {
   const dispatch = useAppDispatch();
   const gridStyles = useGridStyles();
   const buttonStyles = useButtonStyles();
+
+  const next = (language: string) => {
+    dispatch(settingsActions.setLanguage(language));
+    if (LOGIN_TYPE === 'email') {
+      if (USE_PASSWORD) {
+        navigation.navigate('LoginEmailPassword');
+      } else {
+        navigation.navigate('LoginEmail');
+      }
+    } else {
+      if (USE_PASSWORD) {
+        navigation.navigate('LoginPhonePassword');
+      } else {
+        navigation.navigate('LoginPhone');
+      }
+    }
+  };
 
   return (
     <SafeAreaView style={[gridStyles.body]}>
@@ -27,8 +45,7 @@ function ChooseLanguage({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  dispatch(settingsActions.setLanguage('en'));
-                  navigation.replace('Login');
+                  next('en');
                 }}>
                 <Text style={[buttonStyles.label]}>English</Text>
               </TouchableOpacity>
@@ -40,8 +57,7 @@ function ChooseLanguage({navigation}: Props & any) {
                 style={[buttonStyles.button, buttonStyles.buttonTransparent]}
                 activeOpacity={0.5}
                 onPress={() => {
-                  dispatch(settingsActions.setLanguage('ru'));
-                  navigation.replace('Login');
+                  next('ru');
                 }}>
                 <Text style={[buttonStyles.label]}>Русский</Text>
               </TouchableOpacity>

@@ -96,7 +96,7 @@ function LoginPhone({navigation}: Props & any) {
         type: 'byphone',
       }),
     ).then(() => {
-      navigation.replace('Code');
+      navigation.navigate('Code');
     });
   };
 

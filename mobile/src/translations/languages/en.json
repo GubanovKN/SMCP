@@ -30,6 +30,9 @@
         "labelSecondary": "the privacy policy and terms of service",
         "error": "Accept the privacy policy"
       },
+      "forgot": {
+        "label": "Not account/Forgot password?"
+      },
       "continue": {
         "label": "Continue"
       }
@@ -64,6 +67,29 @@
         "labelSecondary": "the privacy policy and terms of service",
         "error": "Accept the privacy policy"
       },
+      "forgot": {
+        "label": "Not account/Forgot password?"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "sendCode": {
+      "title": "Send code",
+      "phone": {
+        "label": "Enter your phone number"
+      },
+      "email": {
+        "label": "Enter your email"
+      },
+      "privacyPolicy": {
+        "label": "By logging in or registering, you agree to",
+        "labelSecondary": "the privacy policy and terms of service",
+        "error": "Accept the privacy policy"
+      },
+      "back": {
+        "label": "Back"
+      },
       "continue": {
         "label": "Continue"
       }
@@ -78,6 +104,16 @@
       },
       "repeat": {
         "label": "Repeat"
+      },
+      "continue": {
+        "label": "Continue"
+      }
+    },
+    "newPassword": {
+      "title": "New password",
+      "password": {
+        "label": "Enter your new password",
+        "placeholder": "Your new password"
       },
       "continue": {
         "label": "Continue"
@@ -100,6 +136,10 @@
       "email": {
         "label": "Enter your email",
         "placeholder": "Your email"
+      },
+      "password": {
+        "label": "Enter your password",
+        "placeholder": "Your password"
       },
       "sex": {
         "label": "Enter your sex",
@@ -131,15 +171,7 @@
     },
     "profile": {
       "title": "Profile",
-      "tabBarLabel": "Profile",
-      "inner": {
-        "avatar": {
-          "label": "U"
-        },
-        "user": {
-          "label": "User"
-        }
-      }
+      "tabBarLabel": "Profile"
     }
   }
 }

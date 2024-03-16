@@ -4,7 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import {BASE_URL} from '@src-common/constants';
+import {BASE_URL, USE_PASSWORD} from '@src-common/constants';
 
 import {fetchWrapper} from '@src-helpers/fetchWrapper';
 
@@ -32,7 +32,6 @@ export const authActions = {...slice.actions, ...extraActions};
 export const authReducer = slice.reducer;
 
 export interface authState {
-  user: any;
   loginData: LoginData;
   registerData: RegisterData | null;
   authData: AuthData | null;
@@ -41,9 +40,8 @@ export interface authState {
 
 function createInitialState(): authState {
   return {
-    user: null,
     loginData: {
-      type: 'token',
+      type: USE_PASSWORD ? 'password' : 'token',
       privacyPolicy: false,
     },
     registerData: null,
@@ -58,6 +56,7 @@ function createReducers() {
     setLoginPrivacyPolicy,
     setLoginCode,
     setLoginPassword,
+    setLoginNewPassword,
     setRegisterData,
     hasError,
     clearError,
@@ -95,6 +94,13 @@ function createReducers() {
     state.loginData.password = action.payload;
   }
 
+  function setLoginNewPassword(
+    state: authState,
+    action: PayloadAction<string | undefined>,
+  ) {
+    state.loginData.newPassword = action.payload;
+  }
+
   function setRegisterData(
     state: authState,
     action: PayloadAction<RegisterData>,
@@ -119,6 +125,7 @@ function createExtraActions() {
     checkCode: checkCode(),
     register: register(),
     login: login(),
+    forgot: forgot(),
     refresh: refresh(),
     logout: logout(),
   };
@@ -170,6 +177,17 @@ function createExtraActions() {
     });
   }
 
+  function forgot() {
+    return createAsyncThunk(`${name}/forgot`, async (arg, {getState}) => {
+      let state = getState() as RootState;
+      return await fetchWrapper.post(`${baseRoute}/forget-password`, {
+        username: state.auth.loginData.username,
+        token: state.auth.loginData.password,
+        newPassword: state.auth.loginData.newPassword,
+      });
+    });
+  }
+
   function refresh() {
     return createAsyncThunk(
       `${name}/refresh-token`,
@@ -194,6 +212,7 @@ function createExtraReducers() {
     checkCode();
     register();
     login();
+    forgot();
     refresh();
     logout();
 
@@ -241,7 +260,6 @@ function createExtraReducers() {
           };
         })
         .addCase(rejected, (state, action) => {
-          console.log(action);
           state.error = action.error.message;
         });
     }
@@ -262,6 +280,23 @@ function createExtraReducers() {
         });
     }
 
+    function forgot() {
+      let {pending, fulfilled, rejected} = extraActions.forgot;
+      builder
+        .addCase(pending, state => {
+          state.error = undefined;
+        })
+        .addCase(fulfilled, state => {
+          state.loginData.timeRepeat = undefined;
+          state.loginData.code = undefined;
+          state.loginData.password = undefined;
+          state.loginData.newPassword = undefined;
+        })
+        .addCase(rejected, (state, action) => {
+          state.error = action.error.message;
+        });
+    }
+
     function refresh() {
       let {pending, fulfilled, rejected} = extraActions.refresh;
       builder
@@ -276,7 +311,6 @@ function createExtraReducers() {
         })
         .addCase(rejected, (state, action) => {
           state.error = action.error.message;
-          state.user = null;
           state.loginData = {
             type: state.loginData.type,
             privacyPolicy: false,
@@ -293,7 +327,6 @@ function createExtraReducers() {
           state.error = undefined;
         })
         .addCase(fulfilled, state => {
-          state.user = null;
           state.loginData = {
             type: state.loginData.type,
             privacyPolicy: false,

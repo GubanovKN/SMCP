@@ -12,9 +12,10 @@ import {
 } from 'redux-persist';
 
 import {authReducer} from './auth.slice';
+import {settingsReducer} from './settings.slice';
+import {userReducer} from './user.slice';
 
 import {sharedStorage, privateStorage} from '@src-storage-mmkv';
-import {settingsReducer} from './settings.slice';
 
 const persistConfigAuth = {
   key: 'auth',
@@ -37,6 +38,7 @@ export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
     settings: persistedSettingsReducer,
+    user: userReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -55,3 +57,4 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export * from './auth.slice';
 export * from './settings.slice';
+export * from './user.slice';

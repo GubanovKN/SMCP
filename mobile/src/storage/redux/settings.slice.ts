@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-const name = 'auth';
+const name = 'settings';
 const initialState = createInitialState();
 const reducers = createReducers();
 const slice = createSlice({name, initialState, reducers});

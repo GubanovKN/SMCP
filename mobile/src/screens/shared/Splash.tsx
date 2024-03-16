@@ -21,9 +21,9 @@ function Splash({navigation}: Props & any) {
   useEffect(() => {
     setTimeout(() => {
       if (authData) {
-        navigation.replace('PrivateRouter');
+        navigation.navigate('PrivateRouter');
       } else {
-        navigation.replace('ChooseLanguage');
+        navigation.navigate('ChooseLanguage');
       }
     }, 5000);
   }, [authData, navigation]);

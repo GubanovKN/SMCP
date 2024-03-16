@@ -12,6 +12,7 @@ export type LoginData = {
   usernameMasked?: string;
   privacyPolicy: boolean;
   password?: string;
+  newPassword?: string;
   code?: string;
   timeRepeat?: number;
   exist?: boolean;

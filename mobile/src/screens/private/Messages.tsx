@@ -1,14 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, ScrollView} from 'react-native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import {TabNavigationParamList} from '@src-types/navigation';
+import {useGridStyles} from '@src-styles';
 
-type Props = NativeStackNavigationProp<TabNavigationParamList, 'Messages'>;
-
-function Messages({navigation}: Props & any) {
+function Messages() {
+  const gridStyles = useGridStyles();
   return (
-    <View style={styles.mainBody}>
+    <View style={gridStyles.body}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.contentContainerStyle}>

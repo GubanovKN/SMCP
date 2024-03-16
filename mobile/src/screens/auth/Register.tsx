@@ -24,6 +24,7 @@ import {
 } from '@src-styles';
 
 import {RootStackParamList} from '@src-types/navigation';
+import {LOGIN_TYPE, USE_PASSWORD} from '@src-common/constants';
 
 const labelsAreaTranslation = 'register';
 
@@ -34,6 +35,7 @@ type FormData = {
   firstName?: string;
   middleName?: string;
   sex?: string;
+  password?: string;
 };
 
 function Register({navigation}: Props & any) {
@@ -50,6 +52,7 @@ function Register({navigation}: Props & any) {
   const [firstName, setFirstName] = useState<string>();
   const [middleName, setMiddleName] = useState<string>();
   const [sex, setSex] = useState<number>(0);
+  const [password, setPassword] = useState<string>();
   const [errors, setErrors] = useState<FormData>({});
 
   useEffect(() => {
@@ -71,6 +74,11 @@ function Register({navigation}: Props & any) {
   const handleChangeMiddleName = (value: string) => {
     setErrors({...errors, middleName: undefined});
     setMiddleName(value);
+  };
+
+  const handleChangePassword = (value: string) => {
+    setErrors({...errors, password: undefined});
+    setPassword(value);
   };
 
   const handleChangeSex = (label: string, value: number) => {
@@ -96,17 +104,33 @@ function Register({navigation}: Props & any) {
   };
 
   const submitForm = () => {
-    dispatch(
-      authActions.setRegisterData({
-        type: 'phone',
-        lastName: lastName!,
-        firstName: firstName!,
-        middleName,
-        sex,
-        phone: loginData.username,
-        phoneToken: loginData.password,
-      }),
-    );
+    if (LOGIN_TYPE === 'email') {
+      dispatch(
+        authActions.setRegisterData({
+          type: 'email',
+          lastName: lastName!,
+          firstName: firstName!,
+          middleName,
+          sex,
+          email: loginData.username,
+          emailToken: loginData.password,
+          password: password,
+        }),
+      );
+    } else {
+      dispatch(
+        authActions.setRegisterData({
+          type: 'phone',
+          lastName: lastName!,
+          firstName: firstName!,
+          middleName,
+          sex,
+          phone: loginData.username,
+          phoneToken: loginData.password,
+          password: password,
+        }),
+      );
+    }
     dispatch(authActions.register());
   };
 
@@ -188,6 +212,33 @@ function Register({navigation}: Props & any) {
                 onChangeText={handleChangeMiddleName}
               />
             </View>
+            {USE_PASSWORD ? (
+              <View style={gridStyles.blockFlex}>
+                <Text style={textInputStyles.label}>
+                  {t(`${labelsAreaTranslation}.password.label`)}
+                </Text>
+                <Input
+                  style={[
+                    textInputStyles.input,
+                    errors.password ? textInputStyles.inputError : null,
+                  ]}
+                  containerStyle={textInputStyles.container}
+                  inputContainerStyle={textInputStyles.container}
+                  cursorColor={theme.colors.primary}
+                  placeholder={t(
+                    `${labelsAreaTranslation}.password.placeholder`,
+                  )}
+                  placeholderTextColor={theme.colors.grey2}
+                  errorStyle={textInputStyles.inputErrorMessageNone}
+                  autoCapitalize="none"
+                  keyboardType="default"
+                  returnKeyType="next"
+                  secureTextEntry={true}
+                  underlineColorAndroid="transparent"
+                  onChangeText={handleChangePassword}
+                />
+              </View>
+            ) : null}
             <View style={gridStyles.blockFlex}>
               <Text style={textInputStyles.label}>
                 {t(`${labelsAreaTranslation}.sex.label`)}
