@@ -4,5 +4,5 @@
   "base_url": "http://your-domain.com",
   "login_type": "phone",
   "use_password": "true",
-  "_copy_without_render": ["*.tsx"]
+  "_copy_without_render": ["src/*"]
 }
