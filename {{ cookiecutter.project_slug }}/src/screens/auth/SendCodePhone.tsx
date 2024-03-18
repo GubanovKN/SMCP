@@ -46,13 +46,16 @@ function SendCodePhone({navigation}: Props & any) {
   const [errors, setErrors] = useState<FormData>({});
 
   useEffect(() => {
+    dispatch(authActions.setLoginPassword());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (loginData.username) {
       setPhone(loginData.username);
     }
     if (loginData.usernameMasked) {
       setPhoneMasked(loginData.usernameMasked);
     }
-    dispatch(authActions.setLoginPassword());
   }, [loginData, dispatch]);
 
   const changePhone = (masked: string, unmasked: string | undefined) => {

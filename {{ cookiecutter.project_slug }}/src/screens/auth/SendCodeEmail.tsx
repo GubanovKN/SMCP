@@ -47,10 +47,13 @@ function SendCodeEmail({navigation}: Props & any) {
   const [errors, setErrors] = useState<FormData>({});
 
   useEffect(() => {
+    dispatch(authActions.setLoginPassword());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (loginData.username) {
       setEmail(loginData.username);
     }
-    dispatch(authActions.setLoginPassword());
   }, [loginData, dispatch]);
 
   const changeEmail = (value: string) => {
