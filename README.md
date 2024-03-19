@@ -27,15 +27,17 @@
 ## Setup
  1. Use cookiecutter for first config cookiecutter ```https://github.com/GubanovKN/native-mobile-template.git```
  2. Parameter login_type in env has two values type "phone" or "email"
- 3. Parameter use_password in env is boolean
+ 3. Parameter use_password in env has two values type "yes" or "no"
 ## How build for development
- 1. For IOS need open terminal in main project path and execute ```cd ios && pod install```
- 2. For Android need add lines in ```~/.bash_profile``` and each deploy run ```source ~/.bash_profile```
+ 1. Use ```npm install``` in root path project
+ 2. For IOS need open terminal in main project path and execute ```cd ios && pod install```
+ 3. For Android need add lines in ```~/.bash_profile``` and each deploy run ```source ~/.bash_profile```
   ```
   export ANDROID_HOME=$HOME/Library/Android/sdk
   export PATH=$PATH:$ANDROID_HOME/emulator
   export PATH=$PATH:$ANDROID_HOME/platform-tools
   ```
+ 4.If change env need reset cache ```npm start -- --reset-cache```
 ## How add fonts
  - For Android copy font in ```android/app/src/main/assets/fonts```
  - For IOS copy font in ```ios/{project_name}/Fonts```
