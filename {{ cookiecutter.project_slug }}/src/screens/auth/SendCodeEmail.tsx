@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {useTheme, Text, CheckBox} from '@rneui/themed';
-import TextInputMask from 'react-native-text-input-mask';
+import {useTheme, Text, Input, CheckBox} from '@rneui/themed';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
@@ -27,11 +26,14 @@ const labelsAreaTranslation = 'sendCode';
 type Props = NativeStackNavigationProp<RootStackParamList, 'SendCode'>;
 
 type FormData = {
-  phone?: string;
+  email?: string;
   checked?: string;
 };
 
-function SendCodePhone({navigation}: Props & any) {
+const re =
+  /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+function SendCodeEmail({navigation}: Props & any) {
   const {t} = useTranslation('sharedRouter');
   const {theme} = useTheme();
   const dispatch = useAppDispatch();
@@ -40,25 +42,23 @@ function SendCodePhone({navigation}: Props & any) {
   const textInputStyles = useTextInputStyles();
   const checkInputStyles = useCheckInputStyles();
   const buttonStyles = useButtonStyles();
-  const [phoneMasked, setPhoneMasked] = useState<string>();
-  const [phone, setPhone] = useState<string | undefined>();
+  const [email, setEmail] = useState<string | undefined>();
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState<FormData>({});
 
   useEffect(() => {
-    if (loginData.username) {
-      setPhone(loginData.username);
-    }
-    if (loginData.usernameMasked) {
-      setPhoneMasked(loginData.usernameMasked);
-    }
     dispatch(authActions.setLoginPassword());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (loginData.username) {
+      setEmail(loginData.username);
+    }
   }, [loginData, dispatch]);
 
-  const changePhone = (masked: string, unmasked: string | undefined) => {
-    setErrors({...errors, phone: undefined});
-    setPhoneMasked(masked);
-    setPhone(`7${unmasked}`);
+  const changeEmail = (value: string) => {
+    setErrors({...errors, email: undefined});
+    setEmail(value);
   };
 
   const toggleCheckbox = () => {
@@ -69,8 +69,8 @@ function SendCodePhone({navigation}: Props & any) {
   const validateForm = () => {
     let currentErrors: FormData = {};
 
-    if (!phone || phone.length !== 11) {
-      currentErrors.phone = t(`${labelsAreaTranslation}.phone.error`);
+    if (!email || !re.test(email)) {
+      currentErrors.email = t(`${labelsAreaTranslation}.email.error`);
     }
 
     if (!checked) {
@@ -86,14 +86,14 @@ function SendCodePhone({navigation}: Props & any) {
   const submitForm = () => {
     dispatch(
       authActions.setLoginUsername({
-        username: phone!,
-        usernameMasked: phoneMasked!,
+        username: email!,
+        usernameMasked: email!,
       }),
     );
     dispatch(authActions.setLoginPrivacyPolicy(checked));
     dispatch(
       authActions.sendCode({
-        type: 'byphone',
+        type: 'byemail',
       }),
     ).then(() => {
       navigation.navigate('Code');
@@ -112,22 +112,23 @@ function SendCodePhone({navigation}: Props & any) {
           <KeyboardAvoidingView enabled>
             <View style={[gridStyles.blockFlex]}>
               <Text style={[textInputStyles.label]}>
-                {t(`${labelsAreaTranslation}.phone.label`)}
+                {t(`${labelsAreaTranslation}.email.label`)}
               </Text>
-              <TextInputMask
+              <Input
                 style={[
                   textInputStyles.input,
-                  errors.phone ? textInputStyles.inputError : null,
+                  errors.email ? textInputStyles.inputError : null,
                 ]}
-                placeholder={'+7 (000) 000-00-00'}
+                containerStyle={textInputStyles.container}
+                inputContainerStyle={textInputStyles.container}
+                errorStyle={textInputStyles.inputErrorMessageNone}
                 placeholderTextColor={theme.colors.grey2}
                 autoCapitalize="none"
-                keyboardType="phone-pad"
+                keyboardType="email-address"
                 underlineColorAndroid="#f000"
                 cursorColor={theme.colors.primary}
-                mask={'+7 ([000]) [000]-[00]-[00]'}
-                onChangeText={changePhone}
-                value={phoneMasked}
+                onChangeText={changeEmail}
+                value={email}
               />
             </View>
             <View style={[gridStyles.blockFlexRow, gridStyles.alignStart]}>
@@ -191,4 +192,4 @@ function SendCodePhone({navigation}: Props & any) {
   );
 }
 
-export default SendCodePhone;
+export default SendCodeEmail;

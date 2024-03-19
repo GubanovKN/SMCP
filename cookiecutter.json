@@ -1,5 +1,8 @@
 {
+  "project_slug": "native-mobile-template",
+  "project_name": "{{ cookiecutter.project_slug }}",
   "base_url": "http://your-domain.com",
-  "login_type": "phone",
-  "use_password": "true"
+  "login_type": ["phone", "email"],
+  "use_password": ["yes", "no"],
+  "_copy_without_render": ["src/*"]
 }
